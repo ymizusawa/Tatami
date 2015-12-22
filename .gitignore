@@ -1,0 +1,11 @@
+/app/build
+/tatami/build
+/gradle
+/.idea
+*.iml
+/gradle.properties
+.gradle
+/local.properties
+.DS_Store
+/build
+/captures
