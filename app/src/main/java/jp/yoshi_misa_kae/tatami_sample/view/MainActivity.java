@@ -14,9 +14,9 @@ import java.util.ArrayList;
 import jp.yoshi_misa_kae.tatami.annotations.view.ActivityInfo;
 import jp.yoshi_misa_kae.tatami.annotations.view.Click;
 import jp.yoshi_misa_kae.tatami.view.widget.TatamiRecyclerView;
-import jp.yoshi_misa_kae.schedules.R;
+import jp.yoshi_misa_kae.tatami_sample.R;
 
-@ActivityInfo(layoutId = R.layout.activity_main_old)
+@ActivityInfo(layoutId = R.layout.activity_main)
 public class MainActivity extends Super1Activity implements
 //        TatamiRecyclerView.TatamiRecyclerViewCreateViewListener,
         TatamiRecyclerView.TatamiRecyclerViewBindViewListener,
