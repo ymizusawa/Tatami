@@ -15,8 +15,7 @@ import jp.yoshi_misa_kae.tatami_sample.R;
  */
 @ActivityInfo(layoutId = R.layout.activity_test2)
 public class Test2Activity extends TatamiActivity implements
-        TatamiViewPager.TatamiViewPagerItemListener,
-        TatamiViewPager.TatamiViewPagerPageSelectedListener {
+        TatamiViewPager.TatamiViewPagerItemListener {
 
     private TatamiViewPager viewPager;
 
@@ -28,7 +27,7 @@ public class Test2Activity extends TatamiActivity implements
         list.add(1);
         list.add(2);
         list.add(3);
-        viewPager.createAdapter(this, getSupportFragmentManager(), list);
+        viewPager.init(this, getSupportFragmentManager(), list);
     }
 
     @Override
@@ -36,8 +35,4 @@ public class Test2Activity extends TatamiActivity implements
         return Test2Fragment.newInstance((Integer) obj);
     }
 
-    @Override
-    public void onPageSelected(int position) {
-
-    }
 }

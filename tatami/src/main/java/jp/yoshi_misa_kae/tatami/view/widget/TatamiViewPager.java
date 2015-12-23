@@ -51,33 +51,24 @@ public class TatamiViewPager extends ViewPager {
         super(context, attrs);
     }
 
-    public void createAdapter(Activity activity, FragmentManager fm, List<?> l) {
-        if(activity instanceof TatamiViewPagerItemListener)
-            itemListener = (TatamiViewPagerItemListener) activity;
-        if(activity instanceof TatamiViewPagerPageScrolledListener)
-            scrolledListener = (TatamiViewPagerPageScrolledListener) activity;
-        if(activity instanceof TatamiViewPagerPageSelectedListener)
-            selectedListener = (TatamiViewPagerPageSelectedListener) activity;
-        if(activity instanceof TatamiViewPagerPageScrollStateChangedListener)
-            scrollStateChangedListener = (TatamiViewPagerPageScrollStateChangedListener) activity;
-
-        createAdapter(fm, l);
+    public void init(Activity activity, FragmentManager fm, List<?> l) {
+        createAdapter(activity, fm, l);
     }
 
-    public void createAdapter(Fragment fragment, FragmentManager fm, List<?> l) {
-        if(fragment instanceof TatamiViewPagerItemListener)
-            itemListener = (TatamiViewPagerItemListener) fragment;
-        if(fragment instanceof TatamiViewPagerPageScrolledListener)
-            scrolledListener = (TatamiViewPagerPageScrolledListener) fragment;
-        if(fragment instanceof TatamiViewPagerPageSelectedListener)
-            selectedListener = (TatamiViewPagerPageSelectedListener) fragment;
-        if(fragment instanceof TatamiViewPagerPageScrollStateChangedListener)
-            scrollStateChangedListener = (TatamiViewPagerPageScrollStateChangedListener) fragment;
-
-        createAdapter(fm, l);
+    public void init(Fragment fragment, FragmentManager fm, List<?> l) {
+        createAdapter(fragment, fm, l);
     }
 
-    private void createAdapter(FragmentManager fm, List<?> l) {
+    private void createAdapter(Object obj, FragmentManager fm, List<?> l) {
+        if(obj instanceof TatamiViewPagerItemListener)
+            itemListener = (TatamiViewPagerItemListener) obj;
+        if(obj instanceof TatamiViewPagerPageScrolledListener)
+            scrolledListener = (TatamiViewPagerPageScrolledListener) obj;
+        if(obj instanceof TatamiViewPagerPageSelectedListener)
+            selectedListener = (TatamiViewPagerPageSelectedListener) obj;
+        if(obj instanceof TatamiViewPagerPageScrollStateChangedListener)
+            scrollStateChangedListener = (TatamiViewPagerPageScrollStateChangedListener) obj;
+        
         fragmentManager = fm;
         list = l;
 
