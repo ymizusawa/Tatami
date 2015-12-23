@@ -1,5 +1,6 @@
 package jp.yoshi_misa_kae.tatami.view.widget;
 
+import android.app.Activity;
 import android.content.Context;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
@@ -17,11 +18,30 @@ import java.util.List;
  */
 public class TatamiViewPager extends ViewPager {
 
+    public interface TatamiViewPagerItemListener {
+        Fragment getViewPagerItem(Object obj, int position);
+    }
+
+    public interface TatamiViewPagerPageScrolledListener {
+        void onPageScrolled(int position, float positionOffset, int positionOffsetPixels);
+    }
+
+    public interface TatamiViewPagerPageSelectedListener {
+        void onPageSelected(int position);
+    }
+
+    public interface TatamiViewPagerPageScrollStateChangedListener {
+        void onPageScrollStateChanged(int state);
+    }
+
     private TatamiViewPagerAdapter adapter;
     private boolean isEnableSwipe = true;
     private static List<?> list = new ArrayList<>();
     private FragmentManager fragmentManager;
-    private static TatamiViewPagerListener listener;
+    private static TatamiViewPagerItemListener itemListener;
+    private static TatamiViewPagerPageScrolledListener scrolledListener;
+    private static TatamiViewPagerPageSelectedListener selectedListener;
+    private static TatamiViewPagerPageScrollStateChangedListener scrollStateChangedListener;
 
     public TatamiViewPager(Context context) {
         this(context, null);
@@ -29,38 +49,62 @@ public class TatamiViewPager extends ViewPager {
 
     public TatamiViewPager(Context context, @Nullable AttributeSet attrs) {
         super(context, attrs);
+    }
+
+    public void createAdapter(Activity activity, FragmentManager fm, List<?> l) {
+        if(activity instanceof TatamiViewPagerItemListener)
+            itemListener = (TatamiViewPagerItemListener) activity;
+        if(activity instanceof TatamiViewPagerPageScrolledListener)
+            scrolledListener = (TatamiViewPagerPageScrolledListener) activity;
+        if(activity instanceof TatamiViewPagerPageSelectedListener)
+            selectedListener = (TatamiViewPagerPageSelectedListener) activity;
+        if(activity instanceof TatamiViewPagerPageScrollStateChangedListener)
+            scrollStateChangedListener = (TatamiViewPagerPageScrollStateChangedListener) activity;
+
+        createAdapter(fm, l);
+    }
+
+    public void createAdapter(Fragment fragment, FragmentManager fm, List<?> l) {
+        if(fragment instanceof TatamiViewPagerItemListener)
+            itemListener = (TatamiViewPagerItemListener) fragment;
+        if(fragment instanceof TatamiViewPagerPageScrolledListener)
+            scrolledListener = (TatamiViewPagerPageScrolledListener) fragment;
+        if(fragment instanceof TatamiViewPagerPageSelectedListener)
+            selectedListener = (TatamiViewPagerPageSelectedListener) fragment;
+        if(fragment instanceof TatamiViewPagerPageScrollStateChangedListener)
+            scrollStateChangedListener = (TatamiViewPagerPageScrollStateChangedListener) fragment;
+
+        createAdapter(fm, l);
+    }
+
+    private void createAdapter(FragmentManager fm, List<?> l) {
+        fragmentManager = fm;
+        list = l;
 
         createAdapter();
+        addOnPageChangeListener(new ViewPager.OnPageChangeListener() {
+
+            @Override
+            public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
+                if(scrolledListener != null) scrolledListener.onPageScrolled(position, positionOffset, positionOffsetPixels);
+            }
+
+            @Override
+            public void onPageSelected(int position) {
+                if(selectedListener != null) selectedListener.onPageSelected(position);
+            }
+
+            @Override
+            public void onPageScrollStateChanged(int state) {
+                if(scrollStateChangedListener != null) scrollStateChangedListener.onPageScrollStateChanged(state);
+            }
+
+        });
     }
 
     private void createAdapter() {
-        if(fragmentManager != null) {
-            if(adapter == null) {
-                adapter = new TatamiViewPagerAdapter(fragmentManager);
-                setAdapter(adapter);
-            }
-        }
-    }
-
-    public void setSupportFragmentManager(FragmentManager fm) {
-        fragmentManager = fm;
-
-        createAdapter();
-    }
-
-    public interface TatamiViewPagerListener {
-        Fragment getViewPagerItem(Object obj, int position);
-    }
-
-    public void setViewPagerListener(TatamiViewPagerListener l) {
-        listener = l;
-    }
-
-    public void setList(List<?> list) {
-        this.list = list;
-
-        if(adapter != null)
-        adapter.notifyDataSetChanged();
+        if (adapter == null)
+            setAdapter(adapter = new TatamiViewPagerAdapter(fragmentManager));
     }
 
     @Override
@@ -74,9 +118,8 @@ public class TatamiViewPager extends ViewPager {
 
     @Override
     public boolean onInterceptTouchEvent(MotionEvent event) {
-        if (isEnableSwipe) {
+        if (isEnableSwipe)
             return super.onInterceptTouchEvent(event);
-        }
 
         return false;
     }
@@ -98,8 +141,8 @@ public class TatamiViewPager extends ViewPager {
 
         @Override
         public Fragment getItem(int position) {
-            if(listener != null)
-                return listener.getViewPagerItem(list.get(position), position);
+            if (itemListener != null)
+                return itemListener.getViewPagerItem(list.get(position), position);
 
             return null;
         }
@@ -111,5 +154,5 @@ public class TatamiViewPager extends ViewPager {
 
 
     }
-    
+
 }

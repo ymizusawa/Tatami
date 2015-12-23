@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+	xmlns:android="http://schemas.android.com/apk/res/android"
+	xmlns:recycler="http://schemas.android.com/apk/res-auto"
+	android:layout_width="match_parent"
+	android:layout_height="match_parent"
+	android:orientation="vertical">
+
+	<Button
+		android:layout_height="wrap_content"
+		android:layout_width="wrap_content"
+		android:text="Button"
+		android:id="@+id/button1"/>
+
+	<Button
+		android:layout_width="wrap_content"
+		android:layout_height="wrap_content"
+		android:text="New Button"
+		android:id="@+id/button2"/>
+
+	<TextView
+        android:id="@+id/textView"
+		android:layout_height="wrap_content"
+		android:textAppearance="?android:attr/textAppearanceMedium"
+		android:layout_width="wrap_content"
+		android:text="Medium Text"/>
+
+	<EditText
+        android:id="@+id/editText"
+		android:layout_height="wrap_content"
+		android:layout_width="wrap_content"
+		android:ems="10"/>
+
+	<jp.yoshi_misa_kae.tatami.view.widget.TatamiRecyclerView
+		android:id="@+id/recyclerView"
+		android:layout_width="match_parent"
+		android:layout_height="match_parent"
+		recycler:rowLayout="@layout/row_recycler"
+		recycler:viewHolderClassName="jp.yoshi_misa_kae.tatami_sample.view.CustomViewHolder"/>
+</LinearLayout>
+

@@ -29,8 +29,10 @@ import jp.yoshi_misa_kae.tatami.R;
 public class TatamiRecyclerView extends RecyclerView {
 
     private final LinearLayoutManager mLayoutManager;
+
     private static int layoutId;
     private static String vhClass;
+
     private TatamiRecyclerViewAdapter adapter = null;
     private static TatamiRecyclerViewCreateViewListener createViewListener = null;
     private static TatamiRecyclerViewBindViewListener bindViewListener = null;
@@ -108,34 +110,22 @@ public class TatamiRecyclerView extends RecyclerView {
     }
 
     public interface TatamiRecyclerViewItemClickListener {
-
         void onItemClick(int position, Object value);
-
     }
 
     public interface TatamiRecyclerViewItemLongClickListener {
-
         void onItemLongClick(int position, Object value);
-
     }
 
     public void setTatamiRecyclerViewListener(Activity activity) {
-        if (activity instanceof TatamiRecyclerViewCreateViewListener) {
-            TatamiRecyclerViewCreateViewListener cvl = (TatamiRecyclerViewCreateViewListener) activity;
-            if (cvl != null) createViewListener = cvl;
-        }
-        if (activity instanceof TatamiRecyclerViewBindViewListener) {
-            TatamiRecyclerViewBindViewListener bvl = (TatamiRecyclerViewBindViewListener) activity;
-            if (bvl != null) bindViewListener = bvl;
-        }
-        if (activity instanceof TatamiRecyclerViewItemClickListener) {
-            TatamiRecyclerViewItemClickListener cl = (TatamiRecyclerViewItemClickListener) activity;
-            if (cl != null) clickListener = cl;
-        }
-        if (activity instanceof TatamiRecyclerViewItemLongClickListener) {
-            TatamiRecyclerViewItemLongClickListener lcl = (TatamiRecyclerViewItemLongClickListener) activity;
-            if (lcl != null) longClickListener = lcl;
-        }
+        if (activity instanceof TatamiRecyclerViewCreateViewListener)
+            createViewListener = (TatamiRecyclerViewCreateViewListener) activity;
+        if (activity instanceof TatamiRecyclerViewBindViewListener)
+            bindViewListener = (TatamiRecyclerViewBindViewListener) activity;
+        if (activity instanceof TatamiRecyclerViewItemClickListener)
+            clickListener = (TatamiRecyclerViewItemClickListener) activity;
+        if (activity instanceof TatamiRecyclerViewItemLongClickListener)
+            longClickListener = (TatamiRecyclerViewItemLongClickListener) activity;
     }
 
     public void setTatamiRecyclerViewListener(Fragment fragment) {
