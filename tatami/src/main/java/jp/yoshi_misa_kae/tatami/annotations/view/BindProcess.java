@@ -9,16 +9,14 @@ import java.lang.annotation.Annotation;
 import java.lang.reflect.Field;
 import java.util.List;
 
-import jp.yoshi_misa_kae.tatami.exception.ParameterException;
-
-import static jp.yoshi_misa_kae.tatami.annotations.view.BindValueType.*;
+import static jp.yoshi_misa_kae.tatami.annotations.view.BindValueType.list;
 
 /**
  * Created by ymizusawa on 2015/12/15.
  */
 public class BindProcess {
 
-    public boolean binder(Context context, Object obj, Field field) {
+    protected static boolean binder(Context context, Object obj, Field field) {
         List<BindValueType> typeList = list();
         for(BindValueType type : typeList) {
             boolean result = isBindView(context, obj, field, type);
@@ -26,17 +24,9 @@ public class BindProcess {
         }
 
         return false;
-//        result = isBindColor(context, obj, field);
-//        if(result) return result;
-//
-//        id = BindUtils.getIdentifier(context, field.getName(), BindValueType.TYPE_ID.getType(), context.getPackageName());
-//        if(id != 0) {
-//            boolean value = context.getResources().getBoolean(id);
-//            return bindField(obj, field, value);
-//        }
     }
 
-    private boolean isBindView(Context context, Object obj, Field field, BindValueType type) {
+    protected static boolean isBindView(Context context, Object obj, Field field, BindValueType type) {
         int id = BindUtils.getIdentifier(context, field.getName(), type.getType(), context.getPackageName());
         if(id != 0) {
             Object value = BindUtils.getResource(context, type, id);
@@ -47,8 +37,8 @@ public class BindProcess {
         }
         return false;
     }
-    
-    private boolean bindField(Object obj, Field field, Object value) {
+
+    protected static boolean bindField(Object obj, Field field, Object value) {
         field.setAccessible(true);
         try {
             field.set(obj, value);
@@ -59,8 +49,8 @@ public class BindProcess {
             return false;
         }
     }
-    
-    public boolean binder(Context context, Object obj, Field field, String defType) {
+
+    protected static boolean binder(Context context, Object obj, Field field, String defType) {
         int viewId = BindUtils.getIdentifier(context, field.getName(), BindValueType.TYPE_ID.getType(), context.getPackageName());
 
         View view = findViewById(obj, viewId);
@@ -78,7 +68,7 @@ public class BindProcess {
         }
     }
 
-    public boolean binder(Context context, Object obj, Field field, Annotation annotation) {
+    protected static boolean binder(Context context, Object obj, Field field, Annotation annotation) {
         List<BindValueType> typeList = BindValueType.list();
         for(BindValueType type : typeList) {
             int id = BindUtils.getIdentifier(context, field.getName(), type.getType(), context.getPackageName());
@@ -94,7 +84,7 @@ public class BindProcess {
         return false;
     }
 
-    public View findViewById(Object obj, int id) {
+    protected static View findViewById(Object obj, int id) {
         if(obj instanceof Activity)
             return ((Activity) obj).findViewById(id);
         else if(obj instanceof View)

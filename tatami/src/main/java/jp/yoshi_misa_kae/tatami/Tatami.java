@@ -42,8 +42,16 @@ public class Tatami
     public static void injectEvent(Activity activity) {
         TatamiActivityFieldInjector.injectEvent(activity);
     }
-    
+
     public static void injectEvent(Fragment fragment) {
         TatamiFragmentFieldInjector.injectEvent(fragment);
+    }
+
+    public static void injectExtra(Activity activity) {
+        TatamiActivityFieldInjector.injectExtra(activity);
+    }
+
+    public static void injectExtra(Fragment fragment) {
+        TatamiFragmentFieldInjector.injectExtra(fragment);
     }
 }

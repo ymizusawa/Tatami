@@ -32,6 +32,7 @@ public class TatamiActivityPresenter implements Presenter<TatamiActivityMvpView>
         Tatami.setContentView(activity);
         Tatami.injectField(activity);
         Tatami.injectEvent(activity);
+        Tatami.injectExtra(activity);
     }
 
     public void createToolbar(Toolbar tb) {

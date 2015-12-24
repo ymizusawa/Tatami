@@ -32,6 +32,7 @@ public class TatamiFragmentPresenter implements Presenter<TatamiFragmentMvpView>
 
         Tatami.injectField(fragment);
         Tatami.injectEvent(fragment);
+        Tatami.injectExtra(fragment);
     }
 
 }

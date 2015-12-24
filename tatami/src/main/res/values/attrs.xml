@@ -6,4 +6,8 @@
         <attr name="viewHolderClassName" format="string" />
     </declare-styleable>
 
+    <declare-styleable name="TatamiViewPager">
+        <attr name="fragmentClassName" format="string" />
+    </declare-styleable>
+
 </resources>

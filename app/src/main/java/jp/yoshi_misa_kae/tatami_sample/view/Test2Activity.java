@@ -1,7 +1,5 @@
 package jp.yoshi_misa_kae.tatami_sample.view;
 
-import android.support.v4.app.Fragment;
-
 import java.util.ArrayList;
 import java.util.List;
 
@@ -14,8 +12,7 @@ import jp.yoshi_misa_kae.tatami_sample.R;
  * Created by Yoshitaka Mizusawa on 2015/12/23.
  */
 @ActivityInfo(layoutId = R.layout.activity_test2)
-public class Test2Activity extends TatamiActivity implements
-        TatamiViewPager.TatamiViewPagerItemListener {
+public class Test2Activity extends TatamiActivity {
 
     private TatamiViewPager viewPager;
 
@@ -30,9 +27,9 @@ public class Test2Activity extends TatamiActivity implements
         viewPager.init(this, getSupportFragmentManager(), list);
     }
 
-    @Override
-    public Fragment getViewPagerItem(Object obj, int position) {
-        return Test2Fragment.newInstance((Integer) obj);
-    }
+//    @Override
+//    public Fragment getViewPagerItem(Object obj, int position) {
+//        return Test2Fragment.newInstance((Integer) obj);
+//    }
 
 }
