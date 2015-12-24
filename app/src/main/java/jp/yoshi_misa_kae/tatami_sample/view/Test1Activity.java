@@ -7,6 +7,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import java.util.ArrayList;
+import java.util.List;
 
 import jp.yoshi_misa_kae.tatami.annotations.view.ActivityInfo;
 import jp.yoshi_misa_kae.tatami.annotations.view.Click;
@@ -14,16 +15,7 @@ import jp.yoshi_misa_kae.tatami.view.widget.TatamiRecyclerView;
 import jp.yoshi_misa_kae.tatami_sample.R;
 
 @ActivityInfo(layoutId = R.layout.activity_test1)
-public class Test1Activity extends Super1Activity implements
-//        TatamiRecyclerView.TatamiRecyclerViewCreateViewListener,
-        TatamiRecyclerView.TatamiRecyclerViewBindViewListener,
-        TatamiRecyclerView.TatamiRecyclerViewItemClickListener {
-
-    @Override
-    public void onItemClick(int position, Object value) {
-        Toast.makeText(getApplicationContext(), "position : " + position + ((Test) value).toString(), Toast.LENGTH_LONG).show();
-    }
-
+public class Test1Activity extends Super1Activity {
 
 //    @TextViewInfo(id = R.id.textView, textId = R.string.app_name)
     private TextView textView;
@@ -35,7 +27,7 @@ public class Test1Activity extends Super1Activity implements
     private int test;
     private String testStr;
     private TatamiRecyclerView recyclerView;
-    private ArrayList<Test> list;
+    private TatamiRecyclerView recyclerView2;
 
     @Override
     public void callOnCreate() {
@@ -47,7 +39,86 @@ public class Test1Activity extends Super1Activity implements
         Log.v("test", "test " + test);
         Log.v("testStr", "testStr " + testStr);
 
-        list = new ArrayList<>();
+        List<Test> list2 = new ArrayList<>();
+        {
+            Test test = new Test();
+            test.textView2 = "111";
+            test.textView3 = "222";
+            list2.add(test);
+        }
+        List<Test> list = new ArrayList<>();
+        {
+            Test test = new Test();
+            test.textView2 = "111";
+            test.textView3 = "222";
+            list.add(test);
+        }
+        {
+            Test test = new Test();
+            test.textView2 = "333";
+            test.textView3 = "444";
+            list.add(test);
+        }
+        {
+            Test test = new Test();
+            test.textView2 = "555";
+            test.textView3 = "666";
+            list.add(test);
+        }
+        {
+            Test test = new Test();
+            test.textView2 = "111";
+            test.textView3 = "222";
+            list.add(test);
+        }
+        {
+            Test test = new Test();
+            test.textView2 = "333";
+            test.textView3 = "444";
+            list.add(test);
+        }
+        {
+            Test test = new Test();
+            test.textView2 = "555";
+            test.textView3 = "666";
+            list.add(test);
+        }
+        {
+            Test test = new Test();
+            test.textView2 = "111";
+            test.textView3 = "222";
+            list.add(test);
+        }
+        {
+            Test test = new Test();
+            test.textView2 = "333";
+            test.textView3 = "444";
+            list.add(test);
+        }
+        {
+            Test test = new Test();
+            test.textView2 = "555";
+            test.textView3 = "666";
+            list.add(test);
+        }
+        {
+            Test test = new Test();
+            test.textView2 = "111";
+            test.textView3 = "222";
+            list.add(test);
+        }
+        {
+            Test test = new Test();
+            test.textView2 = "333";
+            test.textView3 = "444";
+            list.add(test);
+        }
+        {
+            Test test = new Test();
+            test.textView2 = "555";
+            test.textView3 = "666";
+            list.add(test);
+        }
         {
             Test test = new Test();
             test.textView2 = "111";
@@ -67,84 +138,37 @@ public class Test1Activity extends Super1Activity implements
             list.add(test);
         }
 
-        {
-            Test test = new Test();
-            test.textView2 = "111";
-            test.textView3 = "222";
-            list.add(test);
-        }
-        {
-            Test test = new Test();
-            test.textView2 = "333";
-            test.textView3 = "444";
-            list.add(test);
-        }
-        {
-            Test test = new Test();
-            test.textView2 = "555";
-            test.textView3 = "666";
-            list.add(test);
-        }
+        recyclerView.setTatamiRecyclerViewBindViewListener(new TatamiRecyclerView.TatamiRecyclerViewBindViewListener() {
+            @Override
+            public void onBindViewHolder(TatamiRecyclerView.TatamiViewHolder viewHolder, int position, Object value) {
+                CustomViewHolder vh = ((CustomViewHolder) viewHolder);
+                vh.textView2.setText(((Test)value).textView2);
+                vh.textView3.setText(((Test)value).textView3);
+            }
+        });
+        recyclerView.setTatamiRecyclerViewItemClickListener(new TatamiRecyclerView.TatamiRecyclerViewItemClickListener() {
+            @Override
+            public void onItemClick(int position, Object value) {
+                Toast.makeText(getApplicationContext(), "position : " + position + ((Test) value).toString(), Toast.LENGTH_LONG).show();
+            }
+        });
+        recyclerView.setList(list2);
 
-        {
-            Test test = new Test();
-            test.textView2 = "111";
-            test.textView3 = "222";
-            list.add(test);
-        }
-        {
-            Test test = new Test();
-            test.textView2 = "333";
-            test.textView3 = "444";
-            list.add(test);
-        }
-        {
-            Test test = new Test();
-            test.textView2 = "555";
-            test.textView3 = "666";
-            list.add(test);
-        }
-
-        {
-            Test test = new Test();
-            test.textView2 = "111";
-            test.textView3 = "222";
-            list.add(test);
-        }
-        {
-            Test test = new Test();
-            test.textView2 = "333";
-            test.textView3 = "444";
-            list.add(test);
-        }
-        {
-            Test test = new Test();
-            test.textView2 = "555";
-            test.textView3 = "666";
-            list.add(test);
-        }
-
-        {
-            Test test = new Test();
-            test.textView2 = "111";
-            test.textView3 = "222";
-            list.add(test);
-        }
-        {
-            Test test = new Test();
-            test.textView2 = "333";
-            test.textView3 = "444";
-            list.add(test);
-        }
-        {
-            Test test = new Test();
-            test.textView2 = "555";
-            test.textView3 = "666";
-            list.add(test);
-        }
-
-        recyclerView.setTatamiRecyclerViewListener(this);
-        recyclerView.setList(list);
+        recyclerView2.setTatamiRecyclerViewBindViewListener(new TatamiRecyclerView.TatamiRecyclerViewBindViewListener() {
+            @Override
+            public void onBindViewHolder(TatamiRecyclerView.TatamiViewHolder viewHolder, int position, Object value) {
+                CustomViewHolder vh = ((CustomViewHolder) viewHolder);
+                vh.textView2.setText(((Test)value).textView2);
+                vh.textView3.setText(((Test)value).textView3);
+            }
+        });
+        recyclerView2.setTatamiRecyclerViewItemClickListener(new TatamiRecyclerView.TatamiRecyclerViewItemClickListener() {
+            @Override
+            public void onItemClick(int position, Object value) {
+                Toast.makeText(getApplicationContext(), "position2 : " + position + ((Test) value).toString(), Toast.LENGTH_LONG).show();
+            }
+        });
+        recyclerView2.setList(list);
     }
 
     public static class Test {
@@ -167,12 +191,6 @@ public class Test1Activity extends Super1Activity implements
 //        return holder;
 //    }
 
-    @Override
-    public void onBindViewHolder(TatamiRecyclerView.TatamiViewHolder viewHolder, int position, Object value) {
-        CustomViewHolder vh = ((CustomViewHolder) viewHolder);
-        vh.textView2.setText(((Test)value).textView2);
-        vh.textView3.setText(((Test)value).textView3);
-    }
 
     @Click(R.id.button1)
     private void onClickButton1(View view) {

@@ -18,6 +18,7 @@ import java.io.Serializable;
 import java.lang.annotation.Annotation;
 import java.lang.reflect.Field;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 import jp.yoshi_misa_kae.tatami.R;
@@ -49,15 +50,21 @@ public class TatamiViewPager extends ViewPager {
         void onPageScrollStateChanged(int state);
     }
 
+    public interface TatamiViewPagerPageTitleListener {
+        CharSequence getPageTitle(int position);
+    }
+
     private TatamiViewPagerAdapter adapter;
     private boolean isEnableSwipe = true;
-    private static List<?> list = new ArrayList<>();
+    private List<?> list = new ArrayList<>();
     private FragmentManager fragmentManager;
-    private static TatamiViewPagerItemListener itemListener;
-    private static TatamiViewPagerPageScrolledListener scrolledListener;
-    private static TatamiViewPagerPageSelectedListener selectedListener;
-    private static TatamiViewPagerPageScrollStateChangedListener scrollStateChangedListener;
-    private static String fragmentClass;
+    private TatamiViewPagerItemListener itemListener;
+    private TatamiViewPagerPageScrolledListener scrolledListener;
+    private TatamiViewPagerPageSelectedListener selectedListener;
+    private TatamiViewPagerPageScrollStateChangedListener scrollStateChangedListener;
+    private TatamiViewPagerPageTitleListener pageTitleListener;
+    private List<String> fragmentList = new ArrayList<>();
+    private List<String> pageTitleList = new ArrayList<>();
 
     public TatamiViewPager(Context context) {
         this(context, null);
@@ -67,7 +74,23 @@ public class TatamiViewPager extends ViewPager {
         super(context, attrs);
 
         TypedArray a = context.obtainStyledAttributes(attrs, R.styleable.TatamiViewPager);
-        fragmentClass = a.getString(R.styleable.TatamiViewPager_fragmentClassName);
+        String fragmentClass = a.getString(R.styleable.TatamiViewPager_fragmentClassName);
+        String fragmentClasses = a.getString(R.styleable.TatamiViewPager_fragmentClassNames);
+        String pageTitles = a.getString(R.styleable.TatamiViewPager_pageTitles);
+
+        fragmentList = new ArrayList<>();
+        if (!TextUtils.isEmpty(fragmentClass)) {
+            fragmentList.add(fragmentClass);
+        } else if (!TextUtils.isEmpty(fragmentClasses)) {
+            String[] fragmentClassSplit = fragmentClasses.split(",");
+            fragmentList = Arrays.asList(fragmentClassSplit);
+        }
+
+        pageTitleList = new ArrayList<>();
+        if (!TextUtils.isEmpty(pageTitles)) {
+            String[] pageTitlesSplit = pageTitles.split(",");
+            pageTitleList = Arrays.asList(pageTitlesSplit);
+        }
     }
 
     public void init(Activity activity, FragmentManager fm, List<?> l) {
@@ -79,15 +102,17 @@ public class TatamiViewPager extends ViewPager {
     }
 
     private void createAdapter(Object obj, FragmentManager fm, List<?> l) {
-        if(obj instanceof TatamiViewPagerItemListener)
+        if (obj instanceof TatamiViewPagerItemListener)
             itemListener = (TatamiViewPagerItemListener) obj;
-        if(obj instanceof TatamiViewPagerPageScrolledListener)
+        if (obj instanceof TatamiViewPagerPageScrolledListener)
             scrolledListener = (TatamiViewPagerPageScrolledListener) obj;
-        if(obj instanceof TatamiViewPagerPageSelectedListener)
+        if (obj instanceof TatamiViewPagerPageSelectedListener)
             selectedListener = (TatamiViewPagerPageSelectedListener) obj;
-        if(obj instanceof TatamiViewPagerPageScrollStateChangedListener)
+        if (obj instanceof TatamiViewPagerPageScrollStateChangedListener)
             scrollStateChangedListener = (TatamiViewPagerPageScrollStateChangedListener) obj;
-        
+        if (obj instanceof TatamiViewPagerPageTitleListener)
+            pageTitleListener = (TatamiViewPagerPageTitleListener) obj;
+
         fragmentManager = fm;
         list = l;
 
@@ -96,25 +121,29 @@ public class TatamiViewPager extends ViewPager {
 
             @Override
             public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
-                if(scrolledListener != null) scrolledListener.onPageScrolled(position, positionOffset, positionOffsetPixels);
+                if (scrolledListener != null)
+                    scrolledListener.onPageScrolled(position, positionOffset, positionOffsetPixels);
             }
 
             @Override
             public void onPageSelected(int position) {
-                if(selectedListener != null) selectedListener.onPageSelected(position);
+                if (selectedListener != null) selectedListener.onPageSelected(position);
             }
 
             @Override
             public void onPageScrollStateChanged(int state) {
-                if(scrollStateChangedListener != null) scrollStateChangedListener.onPageScrollStateChanged(state);
+                if (scrollStateChangedListener != null)
+                    scrollStateChangedListener.onPageScrollStateChanged(state);
             }
 
         });
     }
 
     private void createAdapter() {
-        if (adapter == null)
-            setAdapter(adapter = new TatamiViewPagerAdapter(getContext(), fragmentManager));
+        if (adapter == null) {
+            adapter = new TatamiViewPagerAdapter(getContext(), fragmentManager);
+            setAdapter(adapter);
+        }
     }
 
     @Override
@@ -138,7 +167,11 @@ public class TatamiViewPager extends ViewPager {
         this.isEnableSwipe = isEnableSwipe;
     }
 
-    private static class TatamiViewPagerAdapter extends FragmentPagerAdapter {
+    public FragmentPagerAdapter getAdapter() {
+        return adapter;
+    }
+
+    private class TatamiViewPagerAdapter extends FragmentPagerAdapter {
 
         private final Context context;
 
@@ -149,33 +182,43 @@ public class TatamiViewPager extends ViewPager {
 
         @Override
         public int getCount() {
-            return list.size();
+            int value = 0;
+            if (list == null || list.size() == 0)
+                value = fragmentList.size();
+            else
+                value = list.size();
+
+            return value;
         }
 
         @Override
         public Fragment getItem(int position) {
             if (itemListener != null)
                 return itemListener.getViewPagerItem(list.get(position), position);
-            else if(!TextUtils.isEmpty(fragmentClass))
+            else if (fragmentList.size() != 0) {
                 try {
-                    Object obj = list.get(position);
-
-                    Class<? extends TatamiFragment> clazz = (Class<? extends TatamiFragment>) Class.forName(fragmentClass);
-                    Field[] fields = clazz.getDeclaredFields();
-
                     Bundle bundle = new Bundle();
-                    for(Field field : fields) {
-                        for(Annotation a : field.getAnnotations()) {
-                            if(a instanceof ExtraSerializable){
-                                bundle.putSerializable(field.getName(), (Serializable) obj);
-                            } else if(a instanceof ExtraParcelable){
-                                bundle.putParcelable(field.getName(), (Parcelable) obj);
-                            } else if(a instanceof ExtraInt){
-                                bundle.putInt(field.getName(), (Integer) obj);
-                            } else if(a instanceof ExtraString){
-                                bundle.putString(field.getName(), (String) obj);
-                            } else if(a instanceof ExtraLong){
-                                bundle.putLong(field.getName(), (Long) obj);
+                    String className = fragmentList.get(fragmentList.size() == 1 ? 0 : position);
+
+                    Class<? extends TatamiFragment> clazz = (Class<? extends TatamiFragment>) Class.forName(className);
+
+                    if (list != null) {
+                        Object obj = list.get(position);
+                        Field[] fields = clazz.getDeclaredFields();
+
+                        for (Field field : fields) {
+                            for (Annotation a : field.getAnnotations()) {
+                                if (a instanceof ExtraSerializable) {
+                                    bundle.putSerializable(field.getName(), (Serializable) obj);
+                                } else if (a instanceof ExtraParcelable) {
+                                    bundle.putParcelable(field.getName(), (Parcelable) obj);
+                                } else if (a instanceof ExtraInt) {
+                                    bundle.putInt(field.getName(), (Integer) obj);
+                                } else if (a instanceof ExtraString) {
+                                    bundle.putString(field.getName(), (String) obj);
+                                } else if (a instanceof ExtraLong) {
+                                    bundle.putLong(field.getName(), (Long) obj);
+                                }
                             }
                         }
                     }
@@ -191,16 +234,31 @@ public class TatamiViewPager extends ViewPager {
                 } catch (IllegalAccessException e) {
                     e.printStackTrace();
                 }
+            }
 
             return null;
         }
+
+        @Override
+        public CharSequence getPageTitle(int position) {
+            if (pageTitleListener != null)
+                return pageTitleListener.getPageTitle(position);
+            else if (pageTitleList.size() != 0)
+                return pageTitleList.get(pageTitleList.size() == 1 ? 0 : position);
+
+            return super.getPageTitle(position);
+        }
+
+
 
         @Override
         public int getItemPosition(Object object) {
             return POSITION_NONE;
         }
 
-
+        public Fragment findFragmentByPosition(ViewPager viewPager, int position) {
+            return (Fragment) instantiateItem(viewPager, position);
+        }
     }
 
 }

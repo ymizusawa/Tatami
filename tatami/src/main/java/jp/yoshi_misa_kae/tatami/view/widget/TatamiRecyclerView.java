@@ -34,11 +34,11 @@ public class TatamiRecyclerView extends RecyclerView {
     private static String vhClass;
 
     private TatamiRecyclerViewAdapter adapter = null;
-    private static TatamiRecyclerViewCreateViewListener createViewListener = null;
-    private static TatamiRecyclerViewBindViewListener bindViewListener = null;
-    private static TatamiRecyclerViewItemClickListener clickListener = null;
-    private static TatamiRecyclerViewItemLongClickListener longClickListener = null;
-    private static List<?> list = new ArrayList<>();
+    private TatamiRecyclerViewCreateViewListener createViewListener = null;
+    private TatamiRecyclerViewBindViewListener bindViewListener = null;
+    private TatamiRecyclerViewItemClickListener clickListener = null;
+    private TatamiRecyclerViewItemLongClickListener longClickListener = null;
+    private List<?> list = new ArrayList<>();
 
     public TatamiRecyclerView(Context context) {
         this(context, null);
@@ -61,7 +61,7 @@ public class TatamiRecyclerView extends RecyclerView {
 
         addItemDecoration(new DividerItemDecoration(context, R.drawable.divider));
 
-        adapter = new TatamiRecyclerViewAdapter(context);
+        adapter = new TatamiRecyclerViewAdapter(context, this);
         setAdapter(adapter);
     }
 
@@ -164,18 +164,23 @@ public class TatamiRecyclerView extends RecyclerView {
         adapter.notifyDataSetChanged();
     }
 
-    private static class TatamiRecyclerViewAdapter extends RecyclerView.Adapter<TatamiViewHolder> {
+    private class TatamiRecyclerViewAdapter extends RecyclerView.Adapter<TatamiViewHolder> {
 
         private final Context context;
+        private final TatamiRecyclerView tatamiRecyclerView;
 
-        public TatamiRecyclerViewAdapter(Context context) {
+        public TatamiRecyclerViewAdapter(Context context, TatamiRecyclerView tatamiRecyclerView) {
             this.context = context;
+            this.tatamiRecyclerView = tatamiRecyclerView;
         }
 
         @Override
         public TatamiViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-            if (createViewListener != null)
-                return createViewListener.onCreateViewHolder(parent, viewType);
+            if (createViewListener != null) {
+                TatamiViewHolder viewHolder = createViewListener.onCreateViewHolder(parent, viewType);
+                viewHolder.setRecyclerView(tatamiRecyclerView);
+                return viewHolder;
+            }
             else {
                 if (!TextUtils.isEmpty(vhClass)) {
                     try {
@@ -185,7 +190,9 @@ public class TatamiRecyclerView extends RecyclerView {
 
                         Class<?>[] types = {View.class};
                         Constructor<? extends TatamiViewHolder> constructor = clazz.getConstructor(types);
-                        return constructor.newInstance(layout);
+                        TatamiViewHolder viewHolder = constructor.newInstance(layout);
+                        viewHolder.setRecyclerView(tatamiRecyclerView);
+                        return viewHolder;
                     } catch (ClassNotFoundException e) {
                         e.printStackTrace();
                     } catch (InstantiationException e) {
@@ -218,6 +225,8 @@ public class TatamiRecyclerView extends RecyclerView {
 
     public static class TatamiViewHolder extends RecyclerView.ViewHolder {
 
+        private TatamiRecyclerView tatamiRecyclerView;
+
         public TatamiViewHolder(View itemView) {
             super(itemView);
 
@@ -226,8 +235,9 @@ public class TatamiRecyclerView extends RecyclerView {
                 @Override
                 public void onClick(View view) {
                     int position = getLayoutPosition();
-                    if (clickListener != null)
-                        clickListener.onItemClick(position, list.get(position));
+
+                    if(tatamiRecyclerView != null && tatamiRecyclerView.clickListener != null)
+                        tatamiRecyclerView.clickListener.onItemClick(position, tatamiRecyclerView.list.get(position));
                 }
 
             });
@@ -237,8 +247,8 @@ public class TatamiRecyclerView extends RecyclerView {
                 @Override
                 public boolean onLongClick(View view) {
                     int position = getLayoutPosition();
-                    if (longClickListener != null)
-                        longClickListener.onItemLongClick(position, list.get(position));
+                    if (tatamiRecyclerView != null && tatamiRecyclerView.longClickListener != null)
+                        tatamiRecyclerView.longClickListener.onItemLongClick(position, tatamiRecyclerView.list.get(position));
 
                     return false;
                 }
@@ -246,6 +256,9 @@ public class TatamiRecyclerView extends RecyclerView {
             });
         }
 
+        public void setRecyclerView(TatamiRecyclerView tatamiRecyclerView) {
+            this.tatamiRecyclerView = tatamiRecyclerView;
+        }
     }
 
 }

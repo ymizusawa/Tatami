@@ -2,8 +2,9 @@ package jp.yoshi_misa_kae.tatami_sample.view;
 
 import android.view.View;
 import android.widget.TextView;
-import jp.yoshi_misa_kae.tatami_sample.R;
+
 import jp.yoshi_misa_kae.tatami.view.widget.TatamiRecyclerView;
+import jp.yoshi_misa_kae.tatami_sample.R;
 
 /**
  * Created by ymizusawa on 2015/12/18.
