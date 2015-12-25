@@ -1,8 +1,10 @@
 package jp.yoshi_misa_kae.tatami.view;
 
 import android.os.Bundle;
+import android.support.annotation.IdRes;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentTransaction;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -21,7 +23,7 @@ public class TatamiFragment extends Fragment implements TatamiFragmentMvpView {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        setRetainInstance(true);
+//        setRetainInstance(true);
     }
 
     @Nullable
@@ -96,6 +98,40 @@ public class TatamiFragment extends Fragment implements TatamiFragmentMvpView {
 
     public void popBackStack() {
         getFragmentManager().popBackStack();
+    }
+
+    public void setFragment(Class<?> clazz, @IdRes int id, Bundle bundle, String tag, boolean isAddToBackStack) {
+        Fragment fragment = getFragmentManager().findFragmentByTag(tag);
+        if (fragment == null) {
+            try {
+                fragment = (Fragment) clazz.newInstance();
+                fragment.setArguments(bundle);
+            } catch (IllegalAccessException e) {
+                throw new RuntimeException(e);
+            } catch (java.lang.InstantiationException e) {
+                throw new RuntimeException(e);
+            }
+
+            FragmentTransaction ft = getFragmentManager().beginTransaction();
+            ft.replace(id, fragment, tag);
+            if (isAddToBackStack)
+                ft.addToBackStack(null);
+            ft.commit();
+        }
+    }
+
+    protected Fragment setFragment(Fragment fragment, int id, String tag, boolean isAddToBackStack) {
+        Fragment f = getFragmentManager().findFragmentByTag(tag);
+        if (f == null) {
+            f = fragment;
+            FragmentTransaction ft = getFragmentManager().beginTransaction();
+            ft.replace(id, f, tag);
+            if (isAddToBackStack)
+                ft.addToBackStack(null);
+            ft.commit();
+        }
+
+        return f;
     }
 
 }

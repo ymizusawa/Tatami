@@ -75,7 +75,6 @@ public class TatamiActivity extends AppCompatActivity implements TatamiActivityM
         callOnDestroy();
     }
 
-    @Deprecated
     public void setFragment(Class<?> clazz, @IdRes int id, Bundle bundle, String tag, boolean isAddToBackStack) {
         Fragment fragment = getSupportFragmentManager().findFragmentByTag(tag);
         if (fragment == null) {
@@ -96,12 +95,14 @@ public class TatamiActivity extends AppCompatActivity implements TatamiActivityM
         }
     }
 
-    protected Fragment setFragment(Fragment fragment, int id, String tag) {
+    protected Fragment setFragment(Fragment fragment, int id, String tag, boolean isAddToBackStack) {
         Fragment f = getSupportFragmentManager().findFragmentByTag(tag);
         if (f == null) {
             f = fragment;
             FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
             ft.replace(id, f, tag);
+            if (isAddToBackStack)
+                ft.addToBackStack(null);
             ft.commit();
         }
 
