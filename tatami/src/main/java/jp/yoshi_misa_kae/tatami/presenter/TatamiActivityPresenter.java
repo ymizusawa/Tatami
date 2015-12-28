@@ -6,14 +6,23 @@ import android.support.v7.app.ActionBar;
 import android.support.v7.widget.Toolbar;
 import android.text.TextUtils;
 import android.view.WindowManager;
+
+import java.util.List;
+
 import jp.yoshi_misa_kae.tatami.Tatami;
 import jp.yoshi_misa_kae.tatami.annotations.view.ActivityInfo;
+import jp.yoshi_misa_kae.tatami.subscribe.TatamiSubscribeActivity;
 import jp.yoshi_misa_kae.tatami.view.TatamiActivity;
 import jp.yoshi_misa_kae.tatami.view.mvp.TatamiActivityMvpView;
+import rx.Observer;
+import rx.Subscription;
+import rx.android.schedulers.AndroidSchedulers;
+import rx.schedulers.Schedulers;
 
 public class TatamiActivityPresenter implements Presenter<TatamiActivityMvpView> {
 
     private TatamiActivityMvpView mvpView;
+    private Subscription subscription = null;
 
     @Override
     public void attachView(TatamiActivityMvpView mvpView) {
@@ -23,16 +32,34 @@ public class TatamiActivityPresenter implements Presenter<TatamiActivityMvpView>
     @Override
     public void detachView() {
         this.mvpView = null;
+
+        if (subscription != null && !subscription.isUnsubscribed()) subscription.unsubscribe();
     }
 
     public void onCreate(Bundle savedInstanceState) {
         TatamiActivity activity = ((TatamiActivity) mvpView.getContext());
         activity.getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_HIDDEN);
 
-        Tatami.setContentView(activity);
-        Tatami.injectField(activity);
-        Tatami.injectEvent(activity);
-        Tatami.injectExtra(activity);
+        subscription = TatamiSubscribeActivity.onCreate(activity)
+//                .subscribeOn(Schedulers.newThread())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(new Observer<Void>() {
+
+                    @Override
+                    public void onCompleted() {
+                        // 処理完了コールバック
+                        mvpView.callOnCreate();
+                    }
+
+                    @Override
+                    public void onError(Throwable e) {
+                        // 処理内で例外が発生すると自動的にonErrorが呼ばれる
+                    }
+
+                    @Override
+                    public void onNext(Void data) {}
+                });
+
     }
 
     public void createToolbar(Toolbar tb) {

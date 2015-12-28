@@ -19,13 +19,6 @@ public class TatamiFragment extends Fragment implements TatamiFragmentMvpView {
 
     private TatamiFragmentPresenter presenter;
 
-    @Override
-    public void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-
-//        setRetainInstance(true);
-    }
-
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {

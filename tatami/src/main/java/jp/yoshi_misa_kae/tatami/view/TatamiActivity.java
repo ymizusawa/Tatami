@@ -34,8 +34,6 @@ public class TatamiActivity extends AppCompatActivity implements TatamiActivityM
         presenter = new TatamiActivityPresenter();
         presenter.attachView(this);
         presenter.onCreate(savedInstanceState);
-
-        callOnCreate();
     }
 
     public void createToolbar(Toolbar tb) {

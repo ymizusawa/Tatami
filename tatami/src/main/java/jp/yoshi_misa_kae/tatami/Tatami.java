@@ -8,6 +8,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import jp.yoshi_misa_kae.tatami.annotations.view.ActivityInfo;
 import jp.yoshi_misa_kae.tatami.annotations.view.FragmentInfo;
+import jp.yoshi_misa_kae.tatami.view.TatamiActivity;
 import jp.yoshi_misa_kae.tatami.view.TatamiFragment;
 import jp.yoshi_misa_kae.tatami.view.injector.TatamiActivityFieldInjector;
 import jp.yoshi_misa_kae.tatami.view.injector.TatamiFragmentFieldInjector;
@@ -18,17 +19,19 @@ public class Tatami
     public static View setContentView(TatamiFragment fragment, LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         FragmentInfo info = fragment.getClass().getAnnotation(FragmentInfo.class);
 
+        if(info == null)
+            return null;
+
         return inflater.inflate(info.layoutId(), container, false);
     }
     
-    public static void setContentView(Activity activity) {
-        ActivityInfo tatamiContentView = activity.getClass().getAnnotation(ActivityInfo.class);
+    public static void setContentView(TatamiActivity activity) {
+        ActivityInfo info = activity.getClass().getAnnotation(ActivityInfo.class);
 
-        if (tatamiContentView == null)
+        if (info == null)
             return;
 
-        int layoutId = tatamiContentView.layoutId();
-        activity.setContentView(layoutId);
+        activity.setContentView(info.layoutId());
     }
 
     public static void injectField(Activity activity) {

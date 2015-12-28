@@ -250,7 +250,6 @@ public class TatamiViewPager extends ViewPager {
         }
 
 
-
         @Override
         public int getItemPosition(Object object) {
             return POSITION_NONE;
