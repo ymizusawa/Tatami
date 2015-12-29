@@ -43,7 +43,7 @@ public class TatamiActivityPresenter implements Presenter<TatamiActivityMvpView>
         subscription = TatamiSubscribeActivity.onCreate(activity)
                 .subscribeOn(Schedulers.immediate())
                 .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(new Observer<Void>() {
+                .subscribe(new Observer<Tatami>() {
 
                     @Override
                     public void onCompleted() {
@@ -55,7 +55,7 @@ public class TatamiActivityPresenter implements Presenter<TatamiActivityMvpView>
                     }
 
                     @Override
-                    public void onNext(Void data) {}
+                    public void onNext(Tatami data) {}
                 });
 
     }

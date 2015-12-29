@@ -10,15 +10,15 @@ import rx.Subscriber;
  */
 public class TatamiSubscribeActivity {
 
-    public static Observable<Void> onCreate(final TatamiActivity activity) {
-        return Observable.create(new Observable.OnSubscribe<Void>() {
+    public static Observable<Tatami> onCreate(final TatamiActivity activity) {
+        return Observable.create(new Observable.OnSubscribe<Tatami>() {
 
             @Override
-            public void call(Subscriber<? super Void> subscriber) {
-                Tatami.setContentView(activity);
-                Tatami.injectField(activity);
-                Tatami.injectEvent(activity);
-                Tatami.injectExtra(activity);
+            public void call(Subscriber<? super Tatami> subscriber) {
+                Tatami tatami = new Tatami(activity);
+                tatami.inject();
+
+                subscriber.onNext(tatami);
 
                 subscriber.onCompleted();
             }
