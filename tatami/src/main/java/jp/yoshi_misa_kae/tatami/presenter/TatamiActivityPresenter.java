@@ -41,19 +41,17 @@ public class TatamiActivityPresenter implements Presenter<TatamiActivityMvpView>
         activity.getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_HIDDEN);
 
         subscription = TatamiSubscribeActivity.onCreate(activity)
-//                .subscribeOn(Schedulers.newThread())
+                .subscribeOn(Schedulers.immediate())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(new Observer<Void>() {
 
                     @Override
                     public void onCompleted() {
-                        // 処理完了コールバック
                         mvpView.callOnCreate();
                     }
 
                     @Override
                     public void onError(Throwable e) {
-                        // 処理内で例外が発生すると自動的にonErrorが呼ばれる
                     }
 
                     @Override

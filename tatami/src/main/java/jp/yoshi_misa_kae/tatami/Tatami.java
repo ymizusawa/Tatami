@@ -6,6 +6,7 @@ import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+
 import jp.yoshi_misa_kae.tatami.annotations.view.ActivityInfo;
 import jp.yoshi_misa_kae.tatami.annotations.view.FragmentInfo;
 import jp.yoshi_misa_kae.tatami.view.TatamiActivity;
@@ -13,18 +14,25 @@ import jp.yoshi_misa_kae.tatami.view.TatamiFragment;
 import jp.yoshi_misa_kae.tatami.view.injector.TatamiActivityFieldInjector;
 import jp.yoshi_misa_kae.tatami.view.injector.TatamiFragmentFieldInjector;
 
-public class Tatami 
-{
+public class Tatami {
+
+    public static void injectActivity(Activity activity) {
+        if(activity instanceof TatamiActivity)
+            TatamiInjectActivity.setContentView((TatamiActivity) activity);
+
+        // inject
+        TatamiInjectActivity.inject(activity);
+    }
 
     public static View setContentView(TatamiFragment fragment, LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         FragmentInfo info = fragment.getClass().getAnnotation(FragmentInfo.class);
 
-        if(info == null)
+        if (info == null)
             return null;
 
         return inflater.inflate(info.layoutId(), container, false);
     }
-    
+
     public static void setContentView(TatamiActivity activity) {
         ActivityInfo info = activity.getClass().getAnnotation(ActivityInfo.class);
 
@@ -37,7 +45,7 @@ public class Tatami
     public static void injectField(Activity activity) {
         TatamiActivityFieldInjector.injectField(activity);
     }
-    
+
     public static void injectField(Fragment fragment) {
         TatamiFragmentFieldInjector.injectField(fragment);
     }
