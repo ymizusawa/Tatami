@@ -79,9 +79,7 @@ public class TatamiActivity extends AppCompatActivity implements TatamiActivityM
             try {
                 fragment = (Fragment) clazz.newInstance();
                 fragment.setArguments(bundle);
-            } catch (IllegalAccessException e) {
-                throw new RuntimeException(e);
-            } catch (InstantiationException e) {
+            } catch (IllegalAccessException | InstantiationException e) {
                 throw new RuntimeException(e);
             }
 
@@ -125,9 +123,6 @@ public class TatamiActivity extends AppCompatActivity implements TatamiActivityM
         return super.onOptionsItemSelected(item);
     }
 
-    public void callOnCreate() {
-    }
-
     public void callOnResume() {
     }
 
@@ -135,9 +130,6 @@ public class TatamiActivity extends AppCompatActivity implements TatamiActivityM
     }
 
     public void callOnStop() {
-    }
-
-    public void callOnDestroy() {
     }
 
     public void callOnCreateOptionsMenu(Menu menu) {
@@ -156,4 +148,11 @@ public class TatamiActivity extends AppCompatActivity implements TatamiActivityM
         return this;
     }
 
+    @Override
+    public void callOnCreate() {
+    }
+
+    @Override
+    public void callOnDestroy() {
+    }
 }

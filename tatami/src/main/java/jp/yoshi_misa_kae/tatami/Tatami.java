@@ -9,9 +9,11 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import java.lang.annotation.Annotation;
+import java.lang.reflect.Array;
 import java.lang.reflect.Field;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
+import java.util.Arrays;
 import java.util.List;
 
 import jp.yoshi_misa_kae.tatami.annotations.res.BindAnim;
@@ -65,28 +67,31 @@ public class Tatami {
     }
 
     public void inject() {
+        bindField();
+        bindEvent();
+    }
+
+    public void bindField() {
         bindField(obj.getClass());
+    }
+
+    public void bindEvent() {
         bindEvent(obj.getClass());
     }
 
     private void bindEvent(Class<?> clazz) {
         Method[] fields = clazz.getDeclaredMethods();
         for (final Method method : fields) {
-            Annotation[] annotations = method.getAnnotations();
-            for (Annotation a : annotations) {
-                if (a.annotationType().equals(Click.class)) {
+            List<Annotation> annotations = Arrays.asList(method.getAnnotations());
+
+            for (Annotation a : annotations)
+                if (a instanceof Click) {
                     Click click = (Click) a;
                     int id = click.value();
                     View view = findViewById(id);
                     if (view != null)
-                        view.setOnClickListener(new View.OnClickListener() {
-
-                            @Override
-                            public void onClick(View view) {
-                                callMethod(method, new Class[]{View.class}, new Object[]{view});
-                            }
-                        });
-                } else if (a.annotationType().equals(LongClick.class)) {
+                        view.setOnClickListener(view1 -> callMethodReflection(method, new Class[]{View.class}, new Object[]{view1}));
+                } else if (a instanceof LongClick) {
                     LongClick click = (LongClick) a;
                     int id = click.value();
 
@@ -97,34 +102,24 @@ public class Tatami {
                         view = ((View) obj).findViewById(id);
 
                     if (view != null)
-                        view.setOnLongClickListener(new View.OnLongClickListener() {
-
-                            @Override
-                            public boolean onLongClick(View view) {
-                                callMethod(method, new Class[]{View.class}, new Object[]{view});
-                                return false;
-                            }
-
+                        view.setOnLongClickListener(view1 -> {
+                            callMethodReflection(method, new Class[]{View.class}, new Object[]{view1});
+                            return false;
                         });
                 }
-            }
         }
 
         Class<?> superClass = clazz.getSuperclass();
         if (superClass != null && superClass != Activity.class) bindEvent(superClass);
     }
 
-    private Object callMethod(Method callMethod, Class[] params, Object[] values) {
+    private Object callMethodReflection(Method callMethod, Class[] params, Object[] values) {
         Object returnValue = null;
 
         try {
             callMethod.setAccessible(true);
             returnValue = callMethod.invoke(obj, callMethod.getParameterTypes().length == 0 ? null : values);
-        } catch (IllegalAccessException e) {
-            e.printStackTrace();
-        } catch (IllegalArgumentException e) {
-            e.printStackTrace();
-        } catch (InvocationTargetException e) {
+        } catch (IllegalAccessException | InvocationTargetException | IllegalArgumentException e) {
             e.printStackTrace();
         }
 
@@ -165,7 +160,7 @@ public class Tatami {
 
         View view = findViewById(viewId);
         if (view != null)
-            bindFieldRefrection(obj, field, view);
+            bindFieldReflection(obj, field, view);
     }
 
     private void binder(Object obj, Field field, Annotation annotation) {
@@ -196,10 +191,10 @@ public class Tatami {
         }
 
         if(value != null)
-            bindFieldRefrection(obj, field, value);
+            bindFieldReflection(obj, field, value);
     }
 
-    private void bindFieldRefrection(Object obj, Field field, Object value) {
+    private void bindFieldReflection(Object obj, Field field, Object value) {
         field.setAccessible(true);
         try {
             field.set(obj, value);
@@ -226,6 +221,10 @@ public class Tatami {
 
         Class<?> superClass = type.getSuperclass();
         return superClass != null && isSuperClassType(superClass, checkClass);
+    }
+
+    public void destroy() {
+
     }
 
 //
