@@ -10,7 +10,7 @@ import android.view.WindowManager;
 
 import jp.yoshi_misa_kae.tatami.Tatami;
 import jp.yoshi_misa_kae.tatami.annotations.view.ActivityInfo;
-import jp.yoshi_misa_kae.tatami.subscribe.TatamiSubscribeActivity;
+import jp.yoshi_misa_kae.tatami.subscribe.TatamiSubscribe;
 import jp.yoshi_misa_kae.tatami.view.TatamiActivity;
 import jp.yoshi_misa_kae.tatami.view.mvp.TatamiActivityMvpView;
 import rx.Observer;
@@ -40,7 +40,8 @@ public class TatamiActivityPresenter implements Presenter<TatamiActivityMvpView>
         TatamiActivity activity = ((TatamiActivity) mvpView.getContext());
         activity.getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_HIDDEN);
 
-        subscription = TatamiSubscribeActivity.onCreate(activity)
+        tatami = new Tatami(activity);
+        subscription = TatamiSubscribe.onCreate(tatami)
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(new Observer<Tatami>() {
@@ -63,7 +64,7 @@ public class TatamiActivityPresenter implements Presenter<TatamiActivityMvpView>
     }
 
     public void onDestroy() {
-        subscription = TatamiSubscribeActivity.onDestroy(tatami)
+        subscription = TatamiSubscribe.onDestroy(tatami)
                 .subscribeOn(Schedulers.immediate())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(aVoid -> {

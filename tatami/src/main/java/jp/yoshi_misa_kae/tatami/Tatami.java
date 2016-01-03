@@ -16,6 +16,11 @@ import java.lang.reflect.Method;
 import java.util.Arrays;
 import java.util.List;
 
+import jp.yoshi_misa_kae.tatami.annotations.extra.ExtraInt;
+import jp.yoshi_misa_kae.tatami.annotations.extra.ExtraLong;
+import jp.yoshi_misa_kae.tatami.annotations.extra.ExtraParcelable;
+import jp.yoshi_misa_kae.tatami.annotations.extra.ExtraSerializable;
+import jp.yoshi_misa_kae.tatami.annotations.extra.ExtraString;
 import jp.yoshi_misa_kae.tatami.annotations.res.BindAnim;
 import jp.yoshi_misa_kae.tatami.annotations.res.BindBool;
 import jp.yoshi_misa_kae.tatami.annotations.res.BindColor;
@@ -91,6 +96,21 @@ public class Tatami {
                     View view = findViewById(id);
                     if (view != null)
                         view.setOnClickListener(view1 -> callMethodReflection(method, new Class[]{View.class}, new Object[]{view1}));
+                } else if (a instanceof LongClick) {
+                    LongClick click = (LongClick) a;
+                    int id = click.value();
+
+                    View view = null;
+                    if (obj instanceof Activity)
+                        view = ((Activity) obj).findViewById(id);
+                    else if (obj instanceof View)
+                        view = ((View) obj).findViewById(id);
+
+                    if (view != null)
+                        view.setOnLongClickListener(view1 -> {
+                            callMethodReflection(method, new Class[]{View.class}, new Object[]{view1});
+                            return false;
+                        });
                 } else if (a instanceof LongClick) {
                     LongClick click = (LongClick) a;
                     int id = click.value();
@@ -188,6 +208,31 @@ public class Tatami {
         } else if (annotation instanceof BindString) {
             int id = BindUtils.getIdentifier(context, field.getName(), "string", context.getPackageName());
             value = context.getString(id);
+        } else if (annotation instanceof ExtraSerializable) {
+            if (obj instanceof Activity)
+                value = ((Activity) obj).getIntent().getSerializableExtra(field.getName());
+            else if (obj instanceof Fragment)
+                value = ((Fragment) obj).getArguments().getSerializable(field.getName());
+        } else if (annotation instanceof ExtraParcelable) {
+            if (obj instanceof Activity)
+                value = ((Activity) obj).getIntent().getParcelableExtra(field.getName());
+            else if (obj instanceof Fragment)
+                value = ((Fragment) obj).getArguments().getParcelable(field.getName());
+        } else if (annotation instanceof ExtraInt) {
+            if (obj instanceof Activity)
+                value = ((Activity) obj).getIntent().getIntExtra(field.getName(), -1);
+            else if (obj instanceof Fragment)
+                value = ((Fragment) obj).getArguments().getInt(field.getName());
+        } else if (annotation instanceof ExtraString) {
+            if (obj instanceof Activity)
+                value = ((Activity) obj).getIntent().getStringExtra(field.getName());
+            else if (obj instanceof Fragment)
+                value = ((Fragment) obj).getArguments().getString(field.getName());
+        } else if (annotation instanceof ExtraLong) {
+            if (obj instanceof Activity)
+                value = ((Activity) obj).getIntent().getLongExtra(field.getName(), -1);
+            else if (obj instanceof Fragment)
+                value = ((Fragment) obj).getArguments().getLong(field.getName());
         }
 
         if(value != null)

@@ -3,19 +3,14 @@ package jp.yoshi_misa_kae.tatami.subscribe;
 import android.util.Log;
 
 import jp.yoshi_misa_kae.tatami.Tatami;
-import jp.yoshi_misa_kae.tatami.view.TatamiActivity;
 import rx.Observable;
-import rx.Subscriber;
-import rx.functions.Func2;
 
 /**
- * Created by Yoshitaka Mizusawa on 2015/12/28.
+ * Created by Yoshitaka Mizusawa on 2015/12/31.
  */
-public class TatamiSubscribeActivity {
+public class TatamiSubscribe {
 
-    public static Observable<Tatami> onCreate(final TatamiActivity activity) {
-        final Tatami tatami = new Tatami(activity);
-
+    public static Observable<Tatami> onCreate(Tatami tatami) {
         return Observable.zip(Observable.create(subscriber -> {
             tatami.bindField();
 
@@ -34,12 +29,13 @@ public class TatamiSubscribeActivity {
         });
     }
 
-    public static Observable<Void> onDestroy(final Tatami tatami) {
+    public static Observable<Void> onDestroy(Tatami tatami) {
         return Observable.create(subscriber -> {
             tatami.destroy();
 
             subscriber.onCompleted();
         });
+
     }
 
 }

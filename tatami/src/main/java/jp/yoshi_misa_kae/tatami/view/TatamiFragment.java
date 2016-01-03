@@ -32,8 +32,6 @@ public class TatamiFragment extends Fragment implements TatamiFragmentMvpView {
         super.onActivityCreated(savedInstanceState);
 
         presenter.onActivityCreated(savedInstanceState);
-
-        callOnActivityCreated();
     }
 
     @Override
@@ -69,6 +67,11 @@ public class TatamiFragment extends Fragment implements TatamiFragmentMvpView {
         super.onSaveInstanceState(outState);
     }
 
+    @Override
+    public void callOnCreateView(View view) {
+    }
+
+    @Override
     public void callOnActivityCreated() {
     }
 

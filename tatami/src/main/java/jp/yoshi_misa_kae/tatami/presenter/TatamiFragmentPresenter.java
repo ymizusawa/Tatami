@@ -1,20 +1,24 @@
 package jp.yoshi_misa_kae.tatami.presenter;
 
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import jp.yoshi_misa_kae.tatami.Tatami;
-import jp.yoshi_misa_kae.tatami.subscribe.TatamiSubscribeActivity;
+import jp.yoshi_misa_kae.tatami.subscribe.TatamiSubscribe;
 import jp.yoshi_misa_kae.tatami.view.TatamiFragment;
 import jp.yoshi_misa_kae.tatami.view.mvp.TatamiFragmentMvpView;
 import rx.Observer;
+import rx.Subscription;
 import rx.android.schedulers.AndroidSchedulers;
 import rx.schedulers.Schedulers;
 
 public class TatamiFragmentPresenter implements Presenter<TatamiFragmentMvpView> {
 
     private TatamiFragmentMvpView mvpView;
+    private Subscription subscription = null;
+    private Tatami tatami = null;
 
     @Override
     public void attachView(TatamiFragmentMvpView mvpView) {
@@ -28,36 +32,34 @@ public class TatamiFragmentPresenter implements Presenter<TatamiFragmentMvpView>
 
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         TatamiFragment fragment = ((TatamiFragment) mvpView.getFragment());
-
-//        subscription = TatamiSubscribeActivity.onCreate(fragment)
-//                .subscribeOn(Schedulers.immediate())
-//                .observeOn(AndroidSchedulers.mainThread())
-//                .subscribe(new Observer<Tatami>() {
-//
-//                    @Override
-//                    public void onCompleted() {
-//                        mvpView.callOnCreate();
-//                    }
-//
-//                    @Override
-//                    public void onError(Throwable e) {
-//                    }
-//
-//                    @Override
-//                    public void onNext(Tatami data) {}
-//                });
-//
+        tatami = new Tatami(fragment, inflater, container);
+        return tatami.getView();
 
 //        return Tatami.setContentView(fragment, inflater,container,savedInstanceState);
-        return null;
     }
 
     public void onActivityCreated(Bundle savedInstanceState) {
-        TatamiFragment fragment = ((TatamiFragment) mvpView.getFragment());
+        subscription = TatamiSubscribe.onCreate(tatami)
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(new Observer<Tatami>() {
 
-//        Tatami.injectField(fragment);
-//        Tatami.injectEvent(fragment);
-//        Tatami.injectExtra(fragment);
+                    @Override
+                    public void onCompleted() {
+                        mvpView.callOnActivityCreated();
+                        Log.v("Tatami", "TatamiSubscribeActivity.onCreate onCompleted");
+                    }
+
+                    @Override
+                    public void onError(Throwable e) {
+                        e.printStackTrace();
+                    }
+
+                    @Override
+                    public void onNext(Tatami t) {
+                        tatami = t;
+                    }
+                });
     }
 
 }
