@@ -62,4 +62,8 @@ public class TatamiFragmentPresenter implements Presenter<TatamiFragmentMvpView>
                 });
     }
 
+    public View getView() {
+        return tatami.getView();
+    }
+
 }

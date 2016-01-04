@@ -101,6 +101,26 @@ public class TatamiViewPager extends ViewPager {
         createAdapter(fragment, fm, l);
     }
 
+    public void setTatamiViewPagerItemListener(TatamiViewPagerItemListener listener) {
+        itemListener = listener;
+    }
+
+    public void setTatamiViewPagerPageScrolledListener(TatamiViewPagerPageScrolledListener listener) {
+        scrolledListener = listener;
+    }
+
+    public void setTatamiViewPagerPageSelectedListener(TatamiViewPagerPageSelectedListener listener) {
+        selectedListener = listener;
+    }
+
+    public void setTatamiViewPagerPageScrollStateChangedListener(TatamiViewPagerPageScrollStateChangedListener listener) {
+        scrollStateChangedListener = listener;
+    }
+
+    public void setTatamiViewPagerPageTitleListener(TatamiViewPagerPageTitleListener listener) {
+        pageTitleListener = listener;
+    }
+
     private void createAdapter(Object obj, FragmentManager fm, List<?> l) {
         if (obj instanceof TatamiViewPagerItemListener)
             itemListener = (TatamiViewPagerItemListener) obj;

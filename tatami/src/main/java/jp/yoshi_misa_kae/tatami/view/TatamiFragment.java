@@ -130,4 +130,8 @@ public class TatamiFragment extends Fragment implements TatamiFragmentMvpView {
         return f;
     }
 
+    public View getView() {
+        return presenter.getView();
+    }
+
 }
