@@ -95,7 +95,15 @@ public class Tatami {
                     int id = click.value();
                     View view = findViewById(id);
                     if (view != null)
-                        view.setOnClickListener(view1 -> callMethodReflection(method, new Class[]{View.class}, new Object[]{view1}));
+                        view.setOnClickListener(new View.OnClickListener() {
+
+                                @Override
+                                public void onClick(View view) {
+                                    callMethodReflection(method, new Class[]{View.class}, new Object[]{view});
+                                }
+                                
+                            
+                            });
                 } else if (a instanceof LongClick) {
                     LongClick click = (LongClick) a;
                     int id = click.value();
@@ -107,24 +115,13 @@ public class Tatami {
                         view = ((View) obj).findViewById(id);
 
                     if (view != null)
-                        view.setOnLongClickListener(view1 -> {
+                        view.setOnLongClickListener(new View.OnLongClickListener() {
+
+                                @Override
+                                public boolean onLongClick(View view1) {
                             callMethodReflection(method, new Class[]{View.class}, new Object[]{view1});
                             return false;
-                        });
-                } else if (a instanceof LongClick) {
-                    LongClick click = (LongClick) a;
-                    int id = click.value();
-
-                    View view = null;
-                    if (obj instanceof Activity)
-                        view = ((Activity) obj).findViewById(id);
-                    else if (obj instanceof View)
-                        view = ((View) obj).findViewById(id);
-
-                    if (view != null)
-                        view.setOnLongClickListener(view1 -> {
-                            callMethodReflection(method, new Class[]{View.class}, new Object[]{view1});
-                            return false;
+                            }
                         });
                 }
         }

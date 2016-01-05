@@ -41,38 +41,18 @@ public class TatamiActivityPresenter implements Presenter<TatamiActivityMvpView>
         activity.getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_HIDDEN);
 
         tatami = new Tatami(activity);
+//        tatami.bindField();
+//        tatami.bindEvent();
+//        
+//        mvpView.callOnCreate();
+        
         subscription = TatamiSubscribe.onCreate(tatami)
-                .subscribeOn(Schedulers.io())
+                .subscribeOn(Schedulers.newThread())
                 .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(new Observer<Tatami>() {
+                .subscribe(new Observer<Void>() {
 
                         @Override
                         public void onCompleted() {
-                            mvpView.callOnCreate();
-                            Log.v("Tatami", "TatamiSubscribeActivity.onCreate onCompleted");
-                        }
-
-                        @Override
-                        public void onError(Throwable e) {
-                        }
-
-                        @Override
-                        public void onNext(Tatami t) {
-                            tatami = t;
-                        }
-                });
-    }
-
-    public void onDestroy() {
-        subscription = TatamiSubscribe.onDestroy(tatami)
-                .subscribeOn(Schedulers.immediate())
-                .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(aVoid -> {
-                    new Observer<Void>() {
-
-                        @Override
-                        public void onCompleted() {
-                            mvpView.callOnDestroy();
                         }
 
                         @Override
@@ -81,8 +61,49 @@ public class TatamiActivityPresenter implements Presenter<TatamiActivityMvpView>
 
                         @Override
                         public void onNext(Void t) {
+                            mvpView.callOnCreate();
                         }
-                    };
+                });
+        TatamiSubscribe.onCreateEvent(tatami)
+            .subscribeOn(Schedulers.newThread())
+            .observeOn(AndroidSchedulers.mainThread())
+            .subscribe(new Observer<Void>() {
+
+                @Override
+                public void onCompleted() {
+                }
+
+                @Override
+                public void onError(Throwable e) {
+                }
+
+                @Override
+                public void onNext(Void t) {
+                }
+            });
+    }
+
+    public void onDestroy() {
+//        tatami.destroy();
+//        
+//        mvpView.callOnDestroy();
+        subscription = TatamiSubscribe.onDestroy(tatami)
+                .subscribeOn(Schedulers.newThread())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(new Observer<Void>() {
+
+                        @Override
+                        public void onCompleted() {
+                        }
+
+                        @Override
+                        public void onError(Throwable e) {
+                        }
+
+                        @Override
+                        public void onNext(Void t) {
+                            mvpView.callOnDestroy();
+                        }
                 });
     }
     public void createToolbar(Toolbar tb) {

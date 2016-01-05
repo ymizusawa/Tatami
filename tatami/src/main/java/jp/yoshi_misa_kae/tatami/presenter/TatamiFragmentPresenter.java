@@ -39,27 +39,46 @@ public class TatamiFragmentPresenter implements Presenter<TatamiFragmentMvpView>
     }
 
     public void onActivityCreated(Bundle savedInstanceState) {
+//        tatami.bindField();
+//        tatami.bindEvent();
+//
+//        mvpView.callOnActivityCreated();
+        
         subscription = TatamiSubscribe.onCreate(tatami)
-                .subscribeOn(Schedulers.io())
-                .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(new Observer<Tatami>() {
+            .subscribeOn(Schedulers.newThread())
+            .observeOn(AndroidSchedulers.mainThread())
+            .subscribe(new Observer<Void>() {
 
-                    @Override
-                    public void onCompleted() {
-                        mvpView.callOnActivityCreated();
-                        Log.v("Tatami", "TatamiSubscribeActivity.onCreate onCompleted");
-                    }
+                @Override
+                public void onCompleted() {
+                }
 
-                    @Override
-                    public void onError(Throwable e) {
-                        e.printStackTrace();
-                    }
+                @Override
+                public void onError(Throwable e) {
+                }
 
-                    @Override
-                    public void onNext(Tatami t) {
-                        tatami = t;
-                    }
-                });
+                @Override
+                public void onNext(Void t) {
+                    mvpView.callOnActivityCreated();
+                }
+            });
+        TatamiSubscribe.onCreateEvent(tatami)
+            .subscribeOn(Schedulers.newThread())
+            .observeOn(AndroidSchedulers.mainThread())
+            .subscribe(new Observer<Void>() {
+
+                @Override
+                public void onCompleted() {
+                }
+
+                @Override
+                public void onError(Throwable e) {
+                }
+
+                @Override
+                public void onNext(Void t) {
+                }
+            });
     }
 
     public View getView() {
