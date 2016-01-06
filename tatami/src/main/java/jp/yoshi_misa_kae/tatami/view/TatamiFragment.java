@@ -37,29 +37,25 @@ public class TatamiFragment extends Fragment implements TatamiFragmentMvpView {
     @Override
     public void onResume() {
         super.onResume();
-
-        callOnResume();
-    }
-
-    @Override
-    public void onStop() {
-        super.onStop();
-
-        callOnStop();
-    }
-
-    @Override
-    public void onDestroyView() {
-        super.onDestroyView();
-
-        callOnDestroyView();
+        presenter.onResume();
     }
 
     @Override
     public void onPause() {
         super.onPause();
+        presenter.onPause();
+    }
 
-        callOnPause();
+    @Override
+    public void onStop() {
+        super.onStop();
+        presenter.onStop();
+    }
+
+    @Override
+    public void onDestroyView() {
+        super.onDestroyView();
+        presenter.onDestroyView();
     }
 
     @Override

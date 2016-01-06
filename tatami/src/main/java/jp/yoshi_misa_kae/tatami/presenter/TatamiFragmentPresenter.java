@@ -19,6 +19,7 @@ public class TatamiFragmentPresenter implements Presenter<TatamiFragmentMvpView>
     private TatamiFragmentMvpView mvpView;
     private Subscription subscription = null;
     private Tatami tatami = null;
+    private boolean isCreate = false;
 
     @Override
     public void attachView(TatamiFragmentMvpView mvpView) {
@@ -31,6 +32,8 @@ public class TatamiFragmentPresenter implements Presenter<TatamiFragmentMvpView>
     }
 
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+        isCreate = false;
+
         TatamiFragment fragment = ((TatamiFragment) mvpView.getFragment());
         tatami = new Tatami(fragment, inflater, container);
         return tatami.getView();
@@ -60,6 +63,9 @@ public class TatamiFragmentPresenter implements Presenter<TatamiFragmentMvpView>
                 @Override
                 public void onNext(Void t) {
                     mvpView.callOnActivityCreated();
+                    mvpView.callOnResume();
+
+                    isCreate = true;
                 }
             });
         TatamiSubscribe.onCreateEvent(tatami)
@@ -79,6 +85,24 @@ public class TatamiFragmentPresenter implements Presenter<TatamiFragmentMvpView>
                 public void onNext(Void t) {
                 }
             });
+    }
+
+    public void onResume() {
+        if(isCreate) {
+            mvpView.callOnResume();
+        }
+    }
+
+    public void onPause() {
+        mvpView.callOnPause();
+    }
+
+    public void onStop() {
+        mvpView.callOnStop();
+    }
+
+    public void onDestroyView() {
+        mvpView.callOnDestroyView();
     }
 
     public View getView() {

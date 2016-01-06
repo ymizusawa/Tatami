@@ -45,32 +45,29 @@ public class TatamiActivity extends AppCompatActivity implements TatamiActivityM
     @Override
     protected void onResume() {
         super.onResume();
-
-        callOnResume();
+        presenter.onResume();
     }
 
     @Override
     protected void onPause() {
         super.onPause();
-
-        callOnPause();
+        presenter.onPause();
     }
 
     @Override
     protected void onStop() {
         super.onStop();
-
-        callOnStop();
+        presenter.onStop();
     }
 
     @Override
     protected void onDestroy() {
         super.onDestroy();
 
+        presenter.onDestroy();
+
         presenter.detachView();
         presenter = null;
-
-        callOnDestroy();
     }
 
     public void setFragment(Class<?> clazz, @IdRes int id, Bundle bundle, String tag, boolean isAddToBackStack) {

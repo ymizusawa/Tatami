@@ -23,6 +23,7 @@ public class TatamiActivityPresenter implements Presenter<TatamiActivityMvpView>
     private TatamiActivityMvpView mvpView;
     private Subscription subscription = null;
     private Tatami tatami = null;
+    private boolean isCreate = false;
 
     @Override
     public void attachView(TatamiActivityMvpView mvpView) {
@@ -37,6 +38,8 @@ public class TatamiActivityPresenter implements Presenter<TatamiActivityMvpView>
     }
 
     public void onCreate(Bundle savedInstanceState) {
+        isCreate = false;
+
         TatamiActivity activity = ((TatamiActivity) mvpView.getContext());
         activity.getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_HIDDEN);
 
@@ -62,6 +65,9 @@ public class TatamiActivityPresenter implements Presenter<TatamiActivityMvpView>
                         @Override
                         public void onNext(Void t) {
                             mvpView.callOnCreate();
+                            mvpView.callOnResume();
+
+                            isCreate = true;
                         }
                 });
         TatamiSubscribe.onCreateEvent(tatami)
@@ -81,6 +87,20 @@ public class TatamiActivityPresenter implements Presenter<TatamiActivityMvpView>
                 public void onNext(Void t) {
                 }
             });
+    }
+
+    public void onResume() {
+        if(isCreate) {
+            mvpView.callOnResume();
+        }
+    }
+
+    public void onPause() {
+        mvpView.callOnPause();
+    }
+
+    public void onStop() {
+        mvpView.callOnStop();
     }
 
     public void onDestroy() {

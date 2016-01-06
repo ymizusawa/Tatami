@@ -9,5 +9,9 @@ public interface TatamiFragmentMvpView extends MvpView {
     Fragment getFragment();
     void callOnCreateView(View view);
     void callOnActivityCreated();
+    void callOnResume();
+    void callOnPause();
+    void callOnStop();
+    void callOnDestroyView();
 
 }
