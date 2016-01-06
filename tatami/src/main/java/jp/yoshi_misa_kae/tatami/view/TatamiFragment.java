@@ -112,7 +112,7 @@ public class TatamiFragment extends Fragment implements TatamiFragmentMvpView {
         }
     }
 
-    protected Fragment setFragment(Fragment fragment, int id, String tag, boolean isAddToBackStack) {
+    protected void setFragment(Fragment fragment, int id, String tag, boolean isAddToBackStack) {
         Fragment f = getFragmentManager().findFragmentByTag(tag);
         if (f == null) {
             f = fragment;
@@ -122,8 +122,38 @@ public class TatamiFragment extends Fragment implements TatamiFragmentMvpView {
                 ft.addToBackStack(null);
             ft.commit();
         }
+    }
 
-        return f;
+    public void addFragment(Class<?> clazz, @IdRes int id, Bundle bundle, String tag, boolean isAddToBackStack) {
+        Fragment fragment = getFragmentManager().findFragmentByTag(tag);
+        if (fragment == null) {
+            try {
+                fragment = (Fragment) clazz.newInstance();
+                fragment.setArguments(bundle);
+            } catch (IllegalAccessException e) {
+                throw new RuntimeException(e);
+            } catch (java.lang.InstantiationException e) {
+                throw new RuntimeException(e);
+            }
+
+            FragmentTransaction ft = getFragmentManager().beginTransaction();
+            ft.add(id, fragment, tag);
+            if (isAddToBackStack)
+                ft.addToBackStack(null);
+            ft.commit();
+        }
+    }
+
+    protected void addFragment(Fragment fragment, int id, String tag, boolean isAddToBackStack) {
+        Fragment f = getFragmentManager().findFragmentByTag(tag);
+        if (f == null) {
+            f = fragment;
+            FragmentTransaction ft = getFragmentManager().beginTransaction();
+            ft.add(id, f, tag);
+            if (isAddToBackStack)
+                ft.addToBackStack(null);
+            ft.commit();
+        }
     }
 
     public View getView() {
