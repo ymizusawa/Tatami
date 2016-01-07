@@ -4,6 +4,7 @@ import android.os.Bundle;
 import android.support.annotation.IdRes;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -105,9 +106,9 @@ public class TatamiFragment extends Fragment implements TatamiFragmentMvpView {
             }
 
             FragmentTransaction ft = getFragmentManager().beginTransaction();
-            ft.replace(id, fragment, tag);
+            ft.replace(id, fragment);
             if (isAddToBackStack)
-                ft.addToBackStack(null);
+                ft.addToBackStack(tag);
             ft.commit();
         }
     }
@@ -117,9 +118,9 @@ public class TatamiFragment extends Fragment implements TatamiFragmentMvpView {
         if (f == null) {
             f = fragment;
             FragmentTransaction ft = getFragmentManager().beginTransaction();
-            ft.replace(id, f, tag);
+            ft.replace(id, f);
             if (isAddToBackStack)
-                ft.addToBackStack(null);
+                ft.addToBackStack(tag);
             ft.commit();
         }
     }
@@ -137,9 +138,9 @@ public class TatamiFragment extends Fragment implements TatamiFragmentMvpView {
             }
 
             FragmentTransaction ft = getFragmentManager().beginTransaction();
-            ft.add(id, fragment, tag);
+            ft.add(id, fragment);
             if (isAddToBackStack)
-                ft.addToBackStack(null);
+                ft.addToBackStack(tag);
             ft.commit();
         }
     }
@@ -149,11 +150,16 @@ public class TatamiFragment extends Fragment implements TatamiFragmentMvpView {
         if (f == null) {
             f = fragment;
             FragmentTransaction ft = getFragmentManager().beginTransaction();
-            ft.add(id, f, tag);
+            ft.add(id, f);
             if (isAddToBackStack)
-                ft.addToBackStack(null);
+                ft.addToBackStack(tag);
             ft.commit();
         }
+    }
+
+    protected void popBackStack(String tag, int flag) {
+        FragmentManager fm = getFragmentManager();
+        fm.popBackStack(tag, flag);
     }
 
     public View getView() {

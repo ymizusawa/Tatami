@@ -76,31 +76,64 @@ public class TatamiActivity extends AppCompatActivity implements TatamiActivityM
             try {
                 fragment = (Fragment) clazz.newInstance();
                 fragment.setArguments(bundle);
-            } catch (IllegalAccessException | InstantiationException e) {
+            } catch (IllegalAccessException e) {
+                throw new RuntimeException(e);
+            } catch (java.lang.InstantiationException e) {
                 throw new RuntimeException(e);
             }
 
             FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
-            ft.replace(id, fragment, tag);
+            ft.replace(id, fragment);
             if (isAddToBackStack)
-                ft.addToBackStack(null);
+                ft.addToBackStack(tag);
             ft.commit();
         }
     }
 
-    protected Fragment setFragment(Fragment fragment, int id, String tag, boolean isAddToBackStack) {
+    protected void setFragment(Fragment fragment, int id, String tag, boolean isAddToBackStack) {
         Fragment f = getSupportFragmentManager().findFragmentByTag(tag);
         if (f == null) {
             f = fragment;
             FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
-            ft.replace(id, f, tag);
+            ft.replace(id, f);
             if (isAddToBackStack)
-                ft.addToBackStack(null);
+                ft.addToBackStack(tag);
             ft.commit();
         }
-
-        return f;
     }
+
+    public void addFragment(Class<?> clazz, @IdRes int id, Bundle bundle, String tag, boolean isAddToBackStack) {
+        Fragment fragment = getSupportFragmentManager().findFragmentByTag(tag);
+        if (fragment == null) {
+            try {
+                fragment = (Fragment) clazz.newInstance();
+                fragment.setArguments(bundle);
+            } catch (IllegalAccessException e) {
+                throw new RuntimeException(e);
+            } catch (java.lang.InstantiationException e) {
+                throw new RuntimeException(e);
+            }
+
+            FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
+            ft.add(id, fragment);
+            if (isAddToBackStack)
+                ft.addToBackStack(tag);
+            ft.commit();
+        }
+    }
+
+    protected void addFragment(Fragment fragment, int id, String tag, boolean isAddToBackStack) {
+        Fragment f = getSupportFragmentManager().findFragmentByTag(tag);
+        if (f == null) {
+            f = fragment;
+            FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
+            ft.add(id, f);
+            if (isAddToBackStack)
+                ft.addToBackStack(tag);
+            ft.commit();
+        }
+    }
+
 
     @Override
     public void startActivity(Intent intent) {
