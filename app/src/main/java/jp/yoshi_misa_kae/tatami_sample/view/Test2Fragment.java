@@ -1,5 +1,6 @@
 package jp.yoshi_misa_kae.tatami_sample.view;
 
+import android.os.Bundle;
 import android.widget.TextView;
 
 import jp.yoshi_misa_kae.tatami.annotations.extra.ExtraInt;
@@ -29,8 +30,8 @@ public class Test2Fragment extends TatamiFragment {
     private int value;
 
     @Override
-    public void callOnActivityCreated() {
-        super.callOnActivityCreated();
+    public void callOnActivityCreated(Bundle savedInstanceState) {
+        super.callOnActivityCreated(savedInstanceState);
 
         textView.setText("" + value);
     }

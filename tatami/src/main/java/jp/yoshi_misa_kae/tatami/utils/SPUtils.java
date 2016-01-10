@@ -48,32 +48,32 @@ public class SPUtils {
         return (double) returnValue;
     }
 
-    public static boolean putBoolean(String key, boolean defValue) {
-        return mPreferenceManager.edit().putBoolean(key, defValue).commit();
+    public static void putBoolean(String key, boolean defValue) {
+        mPreferenceManager.edit().putBoolean(key, defValue).apply();
     }
 
-    public static boolean putFloat(String key, float defValue) {
-        return mPreferenceManager.edit().putFloat(key, defValue).commit();
+    public static void putFloat(String key, float defValue) {
+        mPreferenceManager.edit().putFloat(key, defValue).apply();
     }
 
-    public static boolean putInt(String key, int defValue) {
-        return mPreferenceManager.edit().putInt(key, defValue).commit();
+    public static void putInt(String key, int defValue) {
+        mPreferenceManager.edit().putInt(key, defValue).apply();
     }
 
-    public static boolean putLong(String key, long defValue) {
-        return mPreferenceManager.edit().putLong(key, defValue).commit();
+    public static void putLong(String key, long defValue) {
+        mPreferenceManager.edit().putLong(key, defValue).apply();
     }
 
-    public static boolean putString(String key, String defValue) {
-        return mPreferenceManager.edit().putString(key, defValue).commit();
+    public static void putString(String key, String defValue) {
+        mPreferenceManager.edit().putString(key, defValue).apply();
     }
 
-    public static boolean putDouble(String key, double defValue) {
-        return putFloat(key, (float) defValue);
+    public static void putDouble(String key, double defValue) {
+        putFloat(key, (float) defValue);
     }
 
-    public static boolean putStringSet(String key, Set<String> defValue) {
-        return mPreferenceManager.edit().putStringSet(key, defValue).commit();
+    public static void putStringSet(String key, Set<String> defValue) {
+        mPreferenceManager.edit().putStringSet(key, defValue).apply();
     }
 
 }

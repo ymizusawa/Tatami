@@ -1,5 +1,6 @@
 package jp.yoshi_misa_kae.tatami_sample.view;
 
+import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 import android.widget.EditText;
@@ -30,7 +31,9 @@ public class Test1Activity extends Super1Activity {
     private TatamiRecyclerView recyclerView2;
 
     @Override
-    public void callOnCreate() {
+    public void callOnCreate(Bundle savedInstanceState) {
+        super.callOnCreate(savedInstanceState);
+
         Log.v("test", "button1 " + (button1 == null ? "is null." : "is not null."));
         Log.v("test", "button2 " + (button2 == null ? "is null." : "is not null."));
         Log.v("test", "textView " + (textView == null ? "is null." : "is not null."));

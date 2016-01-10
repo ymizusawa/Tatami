@@ -1,5 +1,7 @@
 package jp.yoshi_misa_kae.tatami_sample.view;
 
+import android.os.Bundle;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -17,8 +19,8 @@ public class Test2Activity extends TatamiActivity {
     private TatamiViewPager viewPager;
 
     @Override
-    public void callOnCreate() {
-        super.callOnCreate();
+    public void callOnCreate(Bundle savedInstanceState) {
+        super.callOnCreate(savedInstanceState);
 
         List<Integer> list = new ArrayList<>();
         list.add(1);

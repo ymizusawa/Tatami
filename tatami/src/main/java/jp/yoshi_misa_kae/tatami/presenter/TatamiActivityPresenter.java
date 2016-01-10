@@ -64,7 +64,7 @@ public class TatamiActivityPresenter implements Presenter<TatamiActivityMvpView>
 
                         @Override
                         public void onNext(Void t) {
-                            mvpView.callOnCreate();
+                            mvpView.callOnCreate(savedInstanceState);
                             mvpView.callOnResume();
 
                             isCreate = true;

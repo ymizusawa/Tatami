@@ -24,7 +24,7 @@ android {
         minSdkVersion 16
         targetSdkVersion 23
         versionCode 1
-        versionName "1.1.9"
+        versionName "1.1.12"
         multiDexEnabled true
     }
     buildTypes {
@@ -61,7 +61,7 @@ publish {
     userOrg = 'ymizusawa'
     groupId = 'jp.yoshi_misa_kae'
     artifactId = 'tatami'
-    publishVersion = "1.1.9"
+    publishVersion = "1.1.12"
     desc = 'Tatami'
     website = 'https://github.com/ymizusawa/tatami'
 }

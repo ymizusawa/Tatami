@@ -69,7 +69,7 @@ public class TatamiFragment extends Fragment implements TatamiFragmentMvpView {
     }
 
     @Override
-    public void callOnActivityCreated() {
+    public void callOnActivityCreated(Bundle savedInstanceState) {
     }
 
     public void callOnResume() {

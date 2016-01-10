@@ -102,6 +102,18 @@ public class TatamiActivity extends AppCompatActivity implements TatamiActivityM
         }
     }
 
+    protected void setFragment(android.app.Fragment fragment, int id, String tag, boolean isAddToBackStack) {
+        android.app.Fragment f = getFragmentManager().findFragmentByTag(tag);
+        if (f == null) {
+            f = fragment;
+            android.app.FragmentTransaction ft = getFragmentManager().beginTransaction();
+            ft.replace(id, f);
+            if (isAddToBackStack)
+                ft.addToBackStack(tag);
+            ft.commit();
+        }
+    }
+
     public void addFragment(Class<?> clazz, @IdRes int id, Bundle bundle, String tag, boolean isAddToBackStack) {
         Fragment fragment = getSupportFragmentManager().findFragmentByTag(tag);
         if (fragment == null) {
@@ -179,7 +191,7 @@ public class TatamiActivity extends AppCompatActivity implements TatamiActivityM
     }
 
     @Override
-    public void callOnCreate() {
+    public void callOnCreate(Bundle savedInstanceState) {
     }
 
     @Override

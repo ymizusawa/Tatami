@@ -62,7 +62,7 @@ public class TatamiFragmentPresenter implements Presenter<TatamiFragmentMvpView>
 
                 @Override
                 public void onNext(Void t) {
-                    mvpView.callOnActivityCreated();
+                    mvpView.callOnActivityCreated(savedInstanceState);
                     mvpView.callOnResume();
 
                     isCreate = true;
