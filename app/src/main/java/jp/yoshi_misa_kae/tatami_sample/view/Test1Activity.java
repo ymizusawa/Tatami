@@ -182,7 +182,7 @@ public class Test1Activity extends Super1Activity {
         public String toString() {
             return "textView2 = " + textView2 + " textView3 = " + textView3;
         }
- 
+
     }
 
 //    @Override

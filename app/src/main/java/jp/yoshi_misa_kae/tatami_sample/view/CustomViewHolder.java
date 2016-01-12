@@ -9,7 +9,9 @@ import jp.yoshi_misa_kae.tatami_sample.R;
 /**
  * Created by ymizusawa on 2015/12/18.
  */
-public class CustomViewHolder extends TatamiRecyclerView.TatamiViewHolder {
+public class CustomViewHolder
+        extends TatamiRecyclerView.TatamiViewHolder
+{
 
     public final TextView textView2;
     public final TextView textView3;

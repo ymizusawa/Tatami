@@ -17,6 +17,7 @@ import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
+
 import jp.yoshi_misa_kae.tatami.presenter.TatamiActivityPresenter;
 import jp.yoshi_misa_kae.tatami.view.mvp.TatamiActivityMvpView;
 

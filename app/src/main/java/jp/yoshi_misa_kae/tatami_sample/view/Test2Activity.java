@@ -14,7 +14,9 @@ import jp.yoshi_misa_kae.tatami_sample.R;
  * Created by Yoshitaka Mizusawa on 2015/12/23.
  */
 @ActivityInfo(layoutId = R.layout.activity_test2)
-public class Test2Activity extends TatamiActivity {
+public class Test2Activity
+        extends TatamiActivity
+{
 
     private TatamiViewPager viewPager;
 

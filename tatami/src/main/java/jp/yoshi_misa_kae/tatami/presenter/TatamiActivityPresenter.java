@@ -5,7 +5,6 @@ import android.os.Bundle;
 import android.support.v7.app.ActionBar;
 import android.support.v7.widget.Toolbar;
 import android.text.TextUtils;
-import android.util.Log;
 import android.view.WindowManager;
 
 import jp.yoshi_misa_kae.tatami.Tatami;
@@ -46,9 +45,9 @@ public class TatamiActivityPresenter implements Presenter<TatamiActivityMvpView>
         tatami = new Tatami(activity);
 //        tatami.bindField();
 //        tatami.bindEvent();
-//        
-//        mvpView.callOnCreate();
-        
+//
+//        mvpView.callOnCreate(savedInstanceState);
+
         subscription = TatamiSubscribe.onCreate(tatami)
                 .subscribeOn(Schedulers.newThread())
                 .observeOn(AndroidSchedulers.mainThread())
@@ -105,7 +104,7 @@ public class TatamiActivityPresenter implements Presenter<TatamiActivityMvpView>
 
     public void onDestroy() {
 //        tatami.destroy();
-//        
+//
 //        mvpView.callOnDestroy();
         subscription = TatamiSubscribe.onDestroy(tatami)
                 .subscribeOn(Schedulers.newThread())
