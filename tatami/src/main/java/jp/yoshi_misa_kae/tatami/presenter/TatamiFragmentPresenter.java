@@ -1,10 +1,10 @@
 package jp.yoshi_misa_kae.tatami.presenter;
 
 import android.os.Bundle;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+
 import jp.yoshi_misa_kae.tatami.Tatami;
 import jp.yoshi_misa_kae.tatami.subscribe.TatamiSubscribe;
 import jp.yoshi_misa_kae.tatami.view.TatamiFragment;
@@ -41,7 +41,7 @@ public class TatamiFragmentPresenter implements Presenter<TatamiFragmentMvpView>
 //        return Tatami.setContentView(fragment, inflater,container,savedInstanceState);
     }
 
-    public void onActivityCreated(Bundle savedInstanceState) {
+    public void onActivityCreated(final Bundle savedInstanceState) {
 //        tatami.bindField();
 //        tatami.bindEvent();
 //

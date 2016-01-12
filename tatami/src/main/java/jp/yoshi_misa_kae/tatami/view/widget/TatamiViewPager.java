@@ -191,7 +191,7 @@ public class TatamiViewPager extends ViewPager {
         return adapter;
     }
 
-    private class TatamiViewPagerAdapter extends FragmentPagerAdapter {
+    public class TatamiViewPagerAdapter extends FragmentPagerAdapter {
 
         private final Context context;
 

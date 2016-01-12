@@ -157,7 +157,7 @@ public class TatamiFragment extends Fragment implements TatamiFragmentMvpView {
         }
     }
 
-    protected void popBackStack(String tag, int flag) {
+    public void popBackStack(String tag, int flag) {
         FragmentManager fm = getFragmentManager();
         fm.popBackStack(tag, flag);
     }
