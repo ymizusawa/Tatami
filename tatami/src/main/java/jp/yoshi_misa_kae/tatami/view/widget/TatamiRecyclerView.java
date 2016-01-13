@@ -30,8 +30,8 @@ public class TatamiRecyclerView extends RecyclerView {
 
     private final LinearLayoutManager mLayoutManager;
 
-    private static int layoutId;
-    private static String vhClass;
+    private int layoutId;
+    private String vhClass;
 
     private TatamiRecyclerViewAdapter adapter = null;
     private TatamiRecyclerViewCreateViewListener createViewListener = null;

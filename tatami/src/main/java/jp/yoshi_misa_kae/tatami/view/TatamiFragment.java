@@ -10,6 +10,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import jp.yoshi_misa_kae.tatami.R;
 import jp.yoshi_misa_kae.tatami.presenter.TatamiFragmentPresenter;
 import jp.yoshi_misa_kae.tatami.view.mvp.TatamiFragmentMvpView;
 
@@ -150,6 +151,86 @@ public class TatamiFragment extends Fragment implements TatamiFragmentMvpView {
         if (f == null) {
             f = fragment;
             FragmentTransaction ft = getFragmentManager().beginTransaction();
+            ft.add(id, f);
+            if (isAddToBackStack)
+                ft.addToBackStack(tag);
+            ft.commit();
+        }
+    }
+
+    public void setFragmentAnimation(Class<?> clazz, @IdRes int id, Bundle bundle, String tag, boolean isAddToBackStack) {
+        Fragment fragment = getFragmentManager().findFragmentByTag(tag);
+        if (fragment == null) {
+            try {
+                fragment = (Fragment) clazz.newInstance();
+                fragment.setArguments(bundle);
+            } catch (IllegalAccessException e) {
+                throw new RuntimeException(e);
+            } catch (java.lang.InstantiationException e) {
+                throw new RuntimeException(e);
+            }
+
+            FragmentTransaction ft = getFragmentManager().beginTransaction();
+            ft.setCustomAnimations(R.anim.fragment_slide_left_enter,
+                    R.anim.fragment_slide_left_exit,
+                    R.anim.fragment_slide_right_enter,
+                    R.anim.fragment_slide_right_exit);
+            ft.replace(id, fragment);
+            if (isAddToBackStack)
+                ft.addToBackStack(tag);
+            ft.commit();
+        }
+    }
+
+    protected void setFragmentAnimation(Fragment fragment, int id, String tag, boolean isAddToBackStack) {
+        Fragment f = getFragmentManager().findFragmentByTag(tag);
+        if (f == null) {
+            f = fragment;
+            FragmentTransaction ft = getFragmentManager().beginTransaction();
+            ft.setCustomAnimations(R.anim.fragment_slide_left_enter,
+                    R.anim.fragment_slide_left_exit,
+                    R.anim.fragment_slide_right_enter,
+                    R.anim.fragment_slide_right_exit);
+            ft.replace(id, f);
+            if (isAddToBackStack)
+                ft.addToBackStack(tag);
+            ft.commit();
+        }
+    }
+
+    public void addFragmentAnimation(Class<?> clazz, @IdRes int id, Bundle bundle, String tag, boolean isAddToBackStack) {
+        Fragment fragment = getFragmentManager().findFragmentByTag(tag);
+        if (fragment == null) {
+            try {
+                fragment = (Fragment) clazz.newInstance();
+                fragment.setArguments(bundle);
+            } catch (IllegalAccessException e) {
+                throw new RuntimeException(e);
+            } catch (java.lang.InstantiationException e) {
+                throw new RuntimeException(e);
+            }
+
+            FragmentTransaction ft = getFragmentManager().beginTransaction();
+            ft.setCustomAnimations(R.anim.fragment_slide_left_enter,
+                    R.anim.fragment_slide_left_exit,
+                    R.anim.fragment_slide_right_enter,
+                    R.anim.fragment_slide_right_exit);
+            ft.add(id, fragment);
+            if (isAddToBackStack)
+                ft.addToBackStack(tag);
+            ft.commit();
+        }
+    }
+
+    protected void addFragmentAnimation(Fragment fragment, int id, String tag, boolean isAddToBackStack) {
+        Fragment f = getFragmentManager().findFragmentByTag(tag);
+        if (f == null) {
+            f = fragment;
+            FragmentTransaction ft = getFragmentManager().beginTransaction();
+            ft.setCustomAnimations(R.anim.fragment_slide_left_enter,
+                    R.anim.fragment_slide_left_exit,
+                    R.anim.fragment_slide_right_enter,
+                    R.anim.fragment_slide_right_exit);
             ft.add(id, f);
             if (isAddToBackStack)
                 ft.addToBackStack(tag);

@@ -18,6 +18,7 @@
 
         <activity android:name="jp.yoshi_misa_kae.tatami_sample.view.Test1Activity"/>
         <activity android:name="jp.yoshi_misa_kae.tatami_sample.view.Test2Activity"/>
+        <activity android:name="jp.yoshi_misa_kae.tatami_sample.view.Test3Activity"/>
     </application>
 
 </manifest>
