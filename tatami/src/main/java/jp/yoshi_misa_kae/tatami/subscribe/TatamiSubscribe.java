@@ -13,28 +13,15 @@ public class TatamiSubscribe {
 
     public static Observable<Void> onCreate(final Tatami tatami) {
         return
-//        Observable.zip(
             Observable.create(
             new Observable.OnSubscribe<Void>() {
                     @Override
                     public void call(Subscriber<? super Void> subscriber) {
                         tatami.bindField();
 
-                        Log.v("Tatami", "observableField");
                         subscriber.onNext(null);
                         subscriber.onCompleted();
                     }});
-//                    , Observable.create(
-//
-//                , new Func2<Boolean, Boolean, Tatami>() {
-//
-//                @Override
-//                public Tatami call(Boolean response1, 
-//                                   Boolean response2) {
-//                    Log.v("Tatami", "observable response1 : " + response1 + " response2 : " + response2);
-//                    return !((Boolean) response1 && (Boolean) response2) ? null : tatami;
-//                }
-//            });
     }
 
     public static Observable<Void> onCreateEvent(final Tatami tatami) {
@@ -45,7 +32,6 @@ public class TatamiSubscribe {
             public void call(Subscriber<? super Void> subscriber) {
                 tatami.bindEvent();
 
-                Log.v("Tatami", "observableEvent");
                 subscriber.onNext(null);
                 subscriber.onCompleted();
             }});
@@ -56,13 +42,12 @@ public class TatamiSubscribe {
             new Observable.OnSubscribe<Void>() {
                 @Override
                 public void call(Subscriber<? super Void> subscriber) {
-
                     tatami.destroy();
 
+                    subscriber.onNext(null);
                     subscriber.onCompleted();
                 }
             });
-
     }
 
 }

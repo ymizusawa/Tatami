@@ -24,6 +24,10 @@ public class TatamiActivityPresenter implements Presenter<TatamiActivityMvpView>
     private Tatami tatami = null;
     private boolean isCreate = false;
 
+    private Subscription subscription1 = null;
+    private Subscription subscription2 = null;
+    private Subscription subscription3 = null;
+
     @Override
     public void attachView(TatamiActivityMvpView mvpView) {
         this.mvpView = mvpView;
@@ -33,63 +37,59 @@ public class TatamiActivityPresenter implements Presenter<TatamiActivityMvpView>
     public void detachView() {
         this.mvpView = null;
 
-        if (subscription != null && !subscription.isUnsubscribed()) subscription.unsubscribe();
+        if (subscription1 != null && !subscription1.isUnsubscribed()) subscription1.unsubscribe();
+        if (subscription2 != null && !subscription2.isUnsubscribed()) subscription2.unsubscribe();
+        if (subscription3 != null && !subscription3.isUnsubscribed()) subscription3.unsubscribe();
     }
 
-    public void onCreate(Bundle savedInstanceState) {
+    public void onCreate(final Bundle savedInstanceState) {
         isCreate = false;
 
         TatamiActivity activity = ((TatamiActivity) mvpView.getContext());
         activity.getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_HIDDEN);
 
         tatami = new Tatami(activity);
-//        tatami.bindField();
-//        tatami.bindEvent();
-//
-//        mvpView.callOnCreate(savedInstanceState);
+        subscription1 = TatamiSubscribe.onCreate(tatami)
+                .subscribeOn(Schedulers.newThread())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(new Observer<Void>() {
+                    @Override
+                    public void onCompleted() {
+                    }
 
-        subscription = TatamiSubscribe.onCreate(tatami)
+                    @Override
+                    public void onError(Throwable e) {
+                    }
+
+                    @Override
+                    public void onNext(Void t) {
+                        mvpView.callOnCreate(savedInstanceState);
+                        mvpView.callOnResume();
+
+                        isCreate = true;
+                    }
+                });
+        subscription2 = TatamiSubscribe.onCreateEvent(tatami)
                 .subscribeOn(Schedulers.newThread())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(new Observer<Void>() {
 
-                        @Override
-                        public void onCompleted() {
-                        }
+                    @Override
+                    public void onCompleted() {
+                    }
 
-                        @Override
-                        public void onError(Throwable e) {
-                        }
+                    @Override
+                    public void onError(Throwable e) {
+                    }
 
-                        @Override
-                        public void onNext(Void t) {
-                            mvpView.callOnCreate(savedInstanceState);
-                            mvpView.callOnResume();
-
-                            isCreate = true;
-                        }
+                    @Override
+                    public void onNext(Void t) {
+                    }
                 });
-        TatamiSubscribe.onCreateEvent(tatami)
-            .subscribeOn(Schedulers.newThread())
-            .observeOn(AndroidSchedulers.mainThread())
-            .subscribe(new Observer<Void>() {
-
-                @Override
-                public void onCompleted() {
-                }
-
-                @Override
-                public void onError(Throwable e) {
-                }
-
-                @Override
-                public void onNext(Void t) {
-                }
-            });
     }
 
     public void onResume() {
-        if(isCreate) {
+        if (isCreate) {
             mvpView.callOnResume();
         }
     }
@@ -103,28 +103,25 @@ public class TatamiActivityPresenter implements Presenter<TatamiActivityMvpView>
     }
 
     public void onDestroy() {
-//        tatami.destroy();
-//
-//        mvpView.callOnDestroy();
-        subscription = TatamiSubscribe.onDestroy(tatami)
+        subscription3 = TatamiSubscribe.onDestroy(tatami)
                 .subscribeOn(Schedulers.newThread())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(new Observer<Void>() {
+                    @Override
+                    public void onCompleted() {
+                    }
 
-                        @Override
-                        public void onCompleted() {
-                        }
+                    @Override
+                    public void onError(Throwable e) {
+                    }
 
-                        @Override
-                        public void onError(Throwable e) {
-                        }
-
-                        @Override
-                        public void onNext(Void t) {
-                            mvpView.callOnDestroy();
-                        }
+                    @Override
+                    public void onNext(Void t) {
+                        mvpView.callOnDestroy();
+                    }
                 });
     }
+
     public void createToolbar(Toolbar tb) {
         if (tb == null)
             return;
@@ -155,7 +152,7 @@ public class TatamiActivityPresenter implements Presenter<TatamiActivityMvpView>
         }
 
         int titleId = a.subTitleId();
-        if(titleId != -1) {
+        if (titleId != -1) {
             actionBar.setSubtitle(titleId);
         }
     }
@@ -168,7 +165,7 @@ public class TatamiActivityPresenter implements Presenter<TatamiActivityMvpView>
         }
 
         int titleId = a.titleId();
-        if(titleId != -1) {
+        if (titleId != -1) {
             actionBar.setTitle(titleId);
         }
     }

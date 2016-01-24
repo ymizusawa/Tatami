@@ -1,20 +1,4 @@
-buildscript {
-    repositories {
-        mavenCentral()
-    }
-
-    dependencies {
-        classpath 'me.tatarka:gradle-retrolambda:3.2.4'
-    }
-}
-
-// Required because retrolambda is on maven central
-repositories {
-    mavenCentral()
-}
-
 apply plugin: 'com.android.library'
-apply plugin: 'me.tatarka.retrolambda'
 
 android {
     compileSdkVersion 23
@@ -24,7 +8,7 @@ android {
         minSdkVersion 15
         targetSdkVersion 23
         versionCode 1
-        versionName "1.1.17"
+        versionName "1.1.18"
         multiDexEnabled true
     }
     buildTypes {
@@ -34,8 +18,8 @@ android {
         }
     }
     compileOptions {
-        sourceCompatibility JavaVersion.VERSION_1_8
-        targetCompatibility JavaVersion.VERSION_1_8
+        sourceCompatibility JavaVersion.VERSION_1_7
+        targetCompatibility JavaVersion.VERSION_1_7
     }
     dexOptions {
         incremental true
@@ -61,7 +45,7 @@ publish {
     userOrg = 'ymizusawa'
     groupId = 'jp.yoshi_misa_kae'
     artifactId = 'tatami'
-    publishVersion = "1.1.17"
+    publishVersion = "1.1.18"
     desc = 'Tatami'
     website = 'https://github.com/ymizusawa/tatami'
 }

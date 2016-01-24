@@ -2,6 +2,7 @@ package jp.yoshi_misa_kae.tatami;
 
 import android.app.Activity;
 import android.content.Context;
+import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v4.content.ContextCompat;
 import android.view.LayoutInflater;
@@ -68,11 +69,6 @@ public class Tatami {
     public Tatami(Fragment fragment) {
         this.obj = fragment;
         context = fragment.getActivity().getApplicationContext();
-    }
-
-    public void inject() {
-        bindField();
-        bindEvent();
     }
 
     public void bindField() {
@@ -244,6 +240,7 @@ public class Tatami {
         }
     }
 
+    @Nullable
     private View findViewById(int id) {
         if (obj instanceof Activity)
             return ((Activity) obj).findViewById(id);
@@ -265,59 +262,6 @@ public class Tatami {
     }
 
     public void destroy() {
-
     }
 
-//
-//
-//
-//    public void injectActivity(Activity activity) {
-//        if(activity instanceof TatamiActivity)
-//            TatamiInjectActivity.setContentView((TatamiActivity) activity);
-//
-//        // inject
-//        TatamiInjectActivity.inject(activity, activity.getClass());
-//    }
-//
-//    public static View setContentView(TatamiFragment fragment, LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-//        FragmentInfo info = fragment.getClass().getAnnotation(FragmentInfo.class);
-//
-//        if (info == null)
-//            return null;
-//
-//        return inflater.inflate(info.layoutId(), container, false);
-//    }
-//
-//    public static void setContentView(TatamiActivity activity) {
-//        ActivityInfo info = activity.getClass().getAnnotation(ActivityInfo.class);
-//
-//        if (info == null)
-//            return;
-//
-//        activity.setContentView(info.layoutId());
-//    }
-//
-//    public static void injectField(Activity activity) {
-//        TatamiActivityFieldInjector.injectField(activity);
-//    }
-//
-//    public static void injectField(Fragment fragment) {
-//        TatamiFragmentFieldInjector.injectField(fragment);
-//    }
-//
-//    public static void injectEvent(Activity activity) {
-//        TatamiActivityFieldInjector.injectEvent(activity);
-//    }
-//
-//    public static void injectEvent(Fragment fragment) {
-//        TatamiFragmentFieldInjector.injectEvent(fragment);
-//    }
-//
-//    public static void injectExtra(Activity activity) {
-//        TatamiActivityFieldInjector.injectExtra(activity);
-//    }
-//
-//    public static void injectExtra(Fragment fragment) {
-//        TatamiFragmentFieldInjector.injectExtra(fragment);
-//    }
 }

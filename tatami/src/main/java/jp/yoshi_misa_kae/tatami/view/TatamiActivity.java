@@ -72,163 +72,6 @@ public class TatamiActivity extends AppCompatActivity implements TatamiActivityM
         presenter = null;
     }
 
-    public void setFragment(Class<?> clazz, @IdRes int id, Bundle bundle, String tag, boolean isAddToBackStack) {
-        Fragment fragment = getSupportFragmentManager().findFragmentByTag(tag);
-        if (fragment == null) {
-            try {
-                fragment = (Fragment) clazz.newInstance();
-                fragment.setArguments(bundle);
-            } catch (IllegalAccessException e) {
-                throw new RuntimeException(e);
-            } catch (java.lang.InstantiationException e) {
-                throw new RuntimeException(e);
-            }
-
-            FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
-            ft.replace(id, fragment);
-            if (isAddToBackStack)
-                ft.addToBackStack(tag);
-            ft.commit();
-        }
-    }
-
-    protected void setFragment(Fragment fragment, int id, String tag, boolean isAddToBackStack) {
-        Fragment f = getSupportFragmentManager().findFragmentByTag(tag);
-        if (f == null) {
-            f = fragment;
-            FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
-            ft.replace(id, f);
-            if (isAddToBackStack)
-                ft.addToBackStack(tag);
-            ft.commit();
-        }
-    }
-
-    protected void setFragment(android.app.Fragment fragment, int id, String tag, boolean isAddToBackStack) {
-        android.app.Fragment f = getFragmentManager().findFragmentByTag(tag);
-        if (f == null) {
-            f = fragment;
-            android.app.FragmentTransaction ft = getFragmentManager().beginTransaction();
-            ft.replace(id, f);
-            if (isAddToBackStack)
-                ft.addToBackStack(tag);
-            ft.commit();
-        }
-    }
-
-    public void addFragment(Class<?> clazz, @IdRes int id, Bundle bundle, String tag, boolean isAddToBackStack) {
-        Fragment fragment = getSupportFragmentManager().findFragmentByTag(tag);
-        if (fragment == null) {
-            try {
-                fragment = (Fragment) clazz.newInstance();
-                fragment.setArguments(bundle);
-            } catch (IllegalAccessException e) {
-                throw new RuntimeException(e);
-            } catch (java.lang.InstantiationException e) {
-                throw new RuntimeException(e);
-            }
-
-            FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
-            ft.add(id, fragment);
-            if (isAddToBackStack)
-                ft.addToBackStack(tag);
-            ft.commit();
-        }
-    }
-
-    protected void addFragment(Fragment fragment, int id, String tag, boolean isAddToBackStack) {
-        Fragment f = getSupportFragmentManager().findFragmentByTag(tag);
-        if (f == null) {
-            f = fragment;
-            FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
-            ft.add(id, f);
-            if (isAddToBackStack)
-                ft.addToBackStack(tag);
-            ft.commit();
-        }
-    }
-
-
-    public void setFragmentAnimation(Class<?> clazz, @IdRes int id, Bundle bundle, String tag, boolean isAddToBackStack) {
-        Fragment fragment = getSupportFragmentManager().findFragmentByTag(tag);
-        if (fragment == null) {
-            try {
-                fragment = (Fragment) clazz.newInstance();
-                fragment.setArguments(bundle);
-            } catch (IllegalAccessException e) {
-                throw new RuntimeException(e);
-            } catch (java.lang.InstantiationException e) {
-                throw new RuntimeException(e);
-            }
-
-            FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
-            ft.setCustomAnimations(R.anim.fragment_slide_left_enter,
-                    R.anim.fragment_slide_left_exit,
-                    R.anim.fragment_slide_right_enter,
-                    R.anim.fragment_slide_right_exit);
-            ft.replace(id, fragment);
-            if (isAddToBackStack)
-                ft.addToBackStack(tag);
-            ft.commit();
-        }
-    }
-
-    protected void setFragmentAnimation(Fragment fragment, int id, String tag, boolean isAddToBackStack) {
-        Fragment f = getSupportFragmentManager().findFragmentByTag(tag);
-        if (f == null) {
-            f = fragment;
-            FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
-            ft.setCustomAnimations(R.anim.fragment_slide_left_enter,
-                    R.anim.fragment_slide_left_exit,
-                    R.anim.fragment_slide_right_enter,
-                    R.anim.fragment_slide_right_exit);
-            ft.replace(id, f);
-            if (isAddToBackStack)
-                ft.addToBackStack(tag);
-            ft.commit();
-        }
-    }
-
-    public void addFragmentAnimation(Class<?> clazz, @IdRes int id, Bundle bundle, String tag, boolean isAddToBackStack) {
-        Fragment fragment = getSupportFragmentManager().findFragmentByTag(tag);
-        if (fragment == null) {
-            try {
-                fragment = (Fragment) clazz.newInstance();
-                fragment.setArguments(bundle);
-            } catch (IllegalAccessException e) {
-                throw new RuntimeException(e);
-            } catch (java.lang.InstantiationException e) {
-                throw new RuntimeException(e);
-            }
-
-            FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
-            ft.setCustomAnimations(R.anim.fragment_slide_left_enter,
-                    R.anim.fragment_slide_left_exit,
-                    R.anim.fragment_slide_right_enter,
-                    R.anim.fragment_slide_right_exit);
-            ft.add(id, fragment);
-            if (isAddToBackStack)
-                ft.addToBackStack(tag);
-            ft.commit();
-        }
-    }
-
-    protected void addFragmentAnimation(Fragment fragment, int id, String tag, boolean isAddToBackStack) {
-        Fragment f = getSupportFragmentManager().findFragmentByTag(tag);
-        if (f == null) {
-            f = fragment;
-            FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
-            ft.setCustomAnimations(R.anim.fragment_slide_left_enter,
-                    R.anim.fragment_slide_left_exit,
-                    R.anim.fragment_slide_right_enter,
-                    R.anim.fragment_slide_right_exit);
-            ft.add(id, f);
-            if (isAddToBackStack)
-                ft.addToBackStack(tag);
-            ft.commit();
-        }
-    }
-
     @Override
     public void startActivity(Intent intent) {
         startActivityForResult(intent, 0);
@@ -279,4 +122,119 @@ public class TatamiActivity extends AppCompatActivity implements TatamiActivityM
     @Override
     public void callOnDestroy() {
     }
+
+
+    public void setFragment(Class<?> clazz, @IdRes int id, Bundle bundle, String tag, boolean isAddToBackStack) {
+        try {
+            Fragment fragment = (Fragment) clazz.newInstance();
+            fragment.setArguments(bundle);
+
+            setFragment(fragment, id, tag, isAddToBackStack);
+        } catch (Exception e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+    protected void setFragment(Fragment fragment, int id, String tag, boolean isAddToBackStack) {
+        Fragment f = getSupportFragmentManager().findFragmentByTag(tag);
+        if (f == null) {
+            f = fragment;
+            FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
+            ft.replace(id, f);
+            if (isAddToBackStack)
+                ft.addToBackStack(tag);
+            ft.commit();
+        }
+    }
+
+    protected void setFragment(android.app.Fragment fragment, int id, String tag, boolean isAddToBackStack) {
+        android.app.Fragment f = getFragmentManager().findFragmentByTag(tag);
+        if (f == null) {
+            f = fragment;
+            android.app.FragmentTransaction ft = getFragmentManager().beginTransaction();
+            ft.replace(id, f);
+            if (isAddToBackStack)
+                ft.addToBackStack(tag);
+            ft.commit();
+        }
+    }
+
+    public void addFragment(Class<?> clazz, @IdRes int id, Bundle bundle, String tag, boolean isAddToBackStack) {
+        try {
+            Fragment fragment = (Fragment) clazz.newInstance();
+            fragment.setArguments(bundle);
+
+            addFragment(fragment, id, tag, isAddToBackStack);
+        } catch (Exception e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+    protected void addFragment(Fragment fragment, int id, String tag, boolean isAddToBackStack) {
+        Fragment f = getSupportFragmentManager().findFragmentByTag(tag);
+        if (f == null) {
+            f = fragment;
+            FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
+            ft.add(id, f);
+            if (isAddToBackStack)
+                ft.addToBackStack(tag);
+            ft.commit();
+        }
+    }
+
+
+    public void setFragmentAnimation(Class<?> clazz, @IdRes int id, Bundle bundle, String tag, boolean isAddToBackStack) {
+        try {
+            Fragment fragment = (Fragment) clazz.newInstance();
+            fragment.setArguments(bundle);
+
+            setFragmentAnimation(fragment, id, tag, isAddToBackStack);
+        } catch (Exception e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+    protected void setFragmentAnimation(Fragment fragment, int id, String tag, boolean isAddToBackStack) {
+        Fragment f = getSupportFragmentManager().findFragmentByTag(tag);
+        if (f == null) {
+            f = fragment;
+            FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
+            ft.setCustomAnimations(R.anim.fragment_slide_left_enter,
+                    R.anim.fragment_slide_left_exit,
+                    R.anim.fragment_slide_right_enter,
+                    R.anim.fragment_slide_right_exit);
+            ft.replace(id, f);
+            if (isAddToBackStack)
+                ft.addToBackStack(tag);
+            ft.commit();
+        }
+    }
+
+    public void addFragmentAnimation(Class<?> clazz, @IdRes int id, Bundle bundle, String tag, boolean isAddToBackStack) {
+        try {
+            Fragment fragment = (Fragment) clazz.newInstance();
+            fragment.setArguments(bundle);
+
+            addFragmentAnimation(fragment, id, tag, isAddToBackStack);
+        } catch (Exception e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+    protected void addFragmentAnimation(Fragment fragment, int id, String tag, boolean isAddToBackStack) {
+        Fragment f = getSupportFragmentManager().findFragmentByTag(tag);
+        if (f == null) {
+            f = fragment;
+            FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
+            ft.setCustomAnimations(R.anim.fragment_slide_left_enter,
+                    R.anim.fragment_slide_left_exit,
+                    R.anim.fragment_slide_right_enter,
+                    R.anim.fragment_slide_right_exit);
+            ft.add(id, f);
+            if (isAddToBackStack)
+                ft.addToBackStack(tag);
+            ft.commit();
+        }
+    }
+
 }

@@ -17,9 +17,10 @@ import rx.schedulers.Schedulers;
 public class TatamiFragmentPresenter implements Presenter<TatamiFragmentMvpView> {
 
     private TatamiFragmentMvpView mvpView;
-    private Subscription subscription = null;
     private Tatami tatami = null;
     private boolean isCreate = false;
+    private Subscription subscription1 = null;
+    private Subscription subscription2 = null;
 
     @Override
     public void attachView(TatamiFragmentMvpView mvpView) {
@@ -29,6 +30,9 @@ public class TatamiFragmentPresenter implements Presenter<TatamiFragmentMvpView>
     @Override
     public void detachView() {
         this.mvpView = null;
+
+        if (subscription1 != null && !subscription1.isUnsubscribed()) subscription1.unsubscribe();
+        if (subscription2 != null && !subscription2.isUnsubscribed()) subscription2.unsubscribe();
     }
 
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -37,38 +41,31 @@ public class TatamiFragmentPresenter implements Presenter<TatamiFragmentMvpView>
         TatamiFragment fragment = ((TatamiFragment) mvpView.getFragment());
         tatami = new Tatami(fragment, inflater, container);
         return tatami.getView();
-
-//        return Tatami.setContentView(fragment, inflater,container,savedInstanceState);
     }
 
     public void onActivityCreated(final Bundle savedInstanceState) {
-//        tatami.bindField();
-//        tatami.bindEvent();
-//
-//        mvpView.callOnActivityCreated();
+        subscription1 = TatamiSubscribe.onCreate(tatami)
+                .subscribeOn(Schedulers.newThread())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(new Observer<Void>() {
 
-        subscription = TatamiSubscribe.onCreate(tatami)
-            .subscribeOn(Schedulers.newThread())
-            .observeOn(AndroidSchedulers.mainThread())
-            .subscribe(new Observer<Void>() {
+                    @Override
+                    public void onCompleted() {
+                    }
 
-                @Override
-                public void onCompleted() {
-                }
+                    @Override
+                    public void onError(Throwable e) {
+                    }
 
-                @Override
-                public void onError(Throwable e) {
-                }
+                    @Override
+                    public void onNext(Void t) {
+                        mvpView.callOnActivityCreated(savedInstanceState);
+                        mvpView.callOnResume();
 
-                @Override
-                public void onNext(Void t) {
-                    mvpView.callOnActivityCreated(savedInstanceState);
-                    mvpView.callOnResume();
-
-                    isCreate = true;
-                }
-            });
-        TatamiSubscribe.onCreateEvent(tatami)
+                        isCreate = true;
+                    }
+                });
+        subscription2 = TatamiSubscribe.onCreateEvent(tatami)
             .subscribeOn(Schedulers.newThread())
             .observeOn(AndroidSchedulers.mainThread())
             .subscribe(new Observer<Void>() {
