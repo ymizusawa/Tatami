@@ -13,11 +13,9 @@ import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
-import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
-
 import jp.yoshi_misa_kae.tatami.R;
 import jp.yoshi_misa_kae.tatami.presenter.TatamiActivityPresenter;
 import jp.yoshi_misa_kae.tatami.view.mvp.TatamiActivityMvpView;
@@ -27,7 +25,6 @@ public class TatamiActivity extends AppCompatActivity implements TatamiActivityM
     protected Toolbar toolbar;
 
     private TatamiActivityPresenter presenter;
-    private RecyclerView.Adapter recyclerViewAdapter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
