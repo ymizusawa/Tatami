@@ -20,7 +20,7 @@ public class TatamiFragmentPresenter implements Presenter<TatamiFragmentMvpView>
     private Tatami tatami = null;
     private boolean isCreate = false;
     private Subscription subscription1 = null;
-    private Subscription subscription2 = null;
+//    private Subscription subscription2 = null;
 
     @Override
     public void attachView(TatamiFragmentMvpView mvpView) {
@@ -32,7 +32,7 @@ public class TatamiFragmentPresenter implements Presenter<TatamiFragmentMvpView>
         this.mvpView = null;
 
         if (subscription1 != null && !subscription1.isUnsubscribed()) subscription1.unsubscribe();
-        if (subscription2 != null && !subscription2.isUnsubscribed()) subscription2.unsubscribe();
+//        if (subscription2 != null && !subscription2.isUnsubscribed()) subscription2.unsubscribe();
     }
 
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -65,23 +65,23 @@ public class TatamiFragmentPresenter implements Presenter<TatamiFragmentMvpView>
                         isCreate = true;
                     }
                 });
-        subscription2 = TatamiSubscribe.onCreateEvent(tatami)
-            .subscribeOn(Schedulers.newThread())
-            .observeOn(AndroidSchedulers.mainThread())
-            .subscribe(new Observer<Void>() {
-
-                @Override
-                public void onCompleted() {
-                }
-
-                @Override
-                public void onError(Throwable e) {
-                }
-
-                @Override
-                public void onNext(Void t) {
-                }
-            });
+//        subscription2 = TatamiSubscribe.onCreateEvent(tatami)
+//            .subscribeOn(Schedulers.newThread())
+//            .observeOn(AndroidSchedulers.mainThread())
+//            .subscribe(new Observer<Void>() {
+//
+//                @Override
+//                public void onCompleted() {
+//                }
+//
+//                @Override
+//                public void onError(Throwable e) {
+//                }
+//
+//                @Override
+//                public void onNext(Void t) {
+//                }
+//            });
     }
 
     public void onResume() {
