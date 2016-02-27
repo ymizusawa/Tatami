@@ -44,7 +44,7 @@ public class TatamiFragmentPresenter implements Presenter<TatamiFragmentMvpView>
     }
 
     public void onActivityCreated(final Bundle savedInstanceState) {
-        subscription1 = TatamiSubscribe.onCreate(tatami)
+        subscription1 = TatamiSubscribe.onCreateEvent(tatami)
                 .subscribeOn(Schedulers.newThread())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(new Observer<Void>() {

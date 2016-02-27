@@ -49,7 +49,7 @@ public class TatamiActivityPresenter implements Presenter<TatamiActivityMvpView>
         activity.getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_HIDDEN);
 
         tatami = new Tatami(activity);
-        subscription1 = TatamiSubscribe.onCreate(tatami)
+        subscription1 = TatamiSubscribe.onCreateEvent(tatami)
                 .subscribeOn(Schedulers.newThread())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(new Observer<Void>() {
