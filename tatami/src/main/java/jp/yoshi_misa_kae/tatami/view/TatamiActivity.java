@@ -6,6 +6,7 @@ package jp.yoshi_misa_kae.tatami.view;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
+import android.support.annotation.CallSuper;
 import android.support.annotation.ColorRes;
 import android.support.annotation.IdRes;
 import android.support.annotation.IntegerRes;
@@ -64,9 +65,6 @@ public class TatamiActivity extends AppCompatActivity implements TatamiActivityM
         super.onDestroy();
 
         presenter.onDestroy();
-
-        presenter.detachView();
-        presenter = null;
     }
 
     @Override
@@ -116,10 +114,12 @@ public class TatamiActivity extends AppCompatActivity implements TatamiActivityM
     public void callOnCreate(Bundle savedInstanceState) {
     }
 
+    @CallSuper
     @Override
     public void callOnDestroy() {
+        presenter.detachView();
+        presenter = null;
     }
-
 
     public void setFragment(Class<?> clazz, @IdRes int id, Bundle bundle, String tag, boolean isAddToBackStack) {
         try {

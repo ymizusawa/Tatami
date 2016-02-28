@@ -83,6 +83,8 @@ public class TatamiFragment extends Fragment implements TatamiFragmentMvpView {
     }
 
     public void callOnDestroyView() {
+        presenter.detachView();
+        presenter = null;
     }
 
     @Override
