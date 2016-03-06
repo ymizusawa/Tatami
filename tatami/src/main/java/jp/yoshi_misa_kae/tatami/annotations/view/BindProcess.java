@@ -12,7 +12,7 @@ import java.util.List;
 import static jp.yoshi_misa_kae.tatami.annotations.view.BindValueType.list;
 
 /**
- * Created by ymizusawa on 2015/12/15.
+ * Created by Yoshitaka Mizusawa on 2015/12/15.
  */
 public class BindProcess {
 

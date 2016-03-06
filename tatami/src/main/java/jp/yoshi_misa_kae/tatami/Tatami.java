@@ -16,20 +16,7 @@ import java.lang.reflect.Method;
 import java.util.Arrays;
 import java.util.List;
 
-import jp.yoshi_misa_kae.tatami.annotations.extra.ExtraInt;
-import jp.yoshi_misa_kae.tatami.annotations.extra.ExtraLong;
-import jp.yoshi_misa_kae.tatami.annotations.extra.ExtraParcelable;
-import jp.yoshi_misa_kae.tatami.annotations.extra.ExtraSerializable;
-import jp.yoshi_misa_kae.tatami.annotations.extra.ExtraString;
-import jp.yoshi_misa_kae.tatami.annotations.res.BindAnim;
-import jp.yoshi_misa_kae.tatami.annotations.res.BindBool;
-import jp.yoshi_misa_kae.tatami.annotations.res.BindColor;
-import jp.yoshi_misa_kae.tatami.annotations.res.BindDimen;
-import jp.yoshi_misa_kae.tatami.annotations.res.BindDrawable;
-import jp.yoshi_misa_kae.tatami.annotations.res.BindInteger;
-import jp.yoshi_misa_kae.tatami.annotations.res.BindString;
 import jp.yoshi_misa_kae.tatami.annotations.view.ActivityInfo;
-import jp.yoshi_misa_kae.tatami.annotations.view.BindProcess;
 import jp.yoshi_misa_kae.tatami.annotations.view.BindUtils;
 import jp.yoshi_misa_kae.tatami.annotations.view.BindValueType;
 import jp.yoshi_misa_kae.tatami.annotations.view.Click;
@@ -71,6 +58,10 @@ public class Tatami {
         context = fragment.getActivity().getApplicationContext();
     }
 
+    public void bind() {
+        bindField();
+        bindEvent();
+    }
     public void bindField() {
         bindField(obj.getClass());
     }
@@ -92,13 +83,13 @@ public class Tatami {
                     if (view != null)
                         view.setOnClickListener(new View.OnClickListener() {
 
-                                @Override
-                                public void onClick(View view) {
-                                    callMethodReflection(method, new Class[]{View.class}, new Object[]{view});
-                                }
-                                
-                            
-                            });
+                            @Override
+                            public void onClick(View view) {
+                                callMethodReflection(method, new Class[]{View.class}, new Object[]{view});
+                            }
+
+
+                        });
                 } else if (a instanceof LongClick) {
                     LongClick click = (LongClick) a;
                     int id = click.value();
@@ -112,10 +103,10 @@ public class Tatami {
                     if (view != null)
                         view.setOnLongClickListener(new View.OnLongClickListener() {
 
-                                @Override
-                                public boolean onLongClick(View view1) {
-                            callMethodReflection(method, new Class[]{View.class}, new Object[]{view1});
-                            return false;
+                            @Override
+                            public boolean onLongClick(View view1) {
+                                callMethodReflection(method, new Class[]{View.class}, new Object[]{view1});
+                                return false;
                             }
                         });
                 }
@@ -145,26 +136,30 @@ public class Tatami {
     private void bindField(Class<?> clazz) {
         Field[] fields = clazz.getDeclaredFields();
         for (Field field : fields) {
+            Annotation[] annotations = field.getAnnotations();
+            if (annotations == null || annotations.length == 0) continue;
+
             field.setAccessible(true);
 
-            Class<?> type = field.getType();
-            BindProcess binder = null;
-            if (isSuperClassType(type, View.class))
-                bindView(field);
-            else
-                bindValue(field);
+            for (Annotation annotation : annotations) {
+                int type = TatamiType.getAnnotation(annotation);
+                switch (type) {
+                    case TatamiType.VIEW: {
+                        bindView(field);
+                        break;
+                    }
+                    default:
+                    {
+//                        bindValue(field, type);
+                        binder(obj, field, type);
+                        break;
+                    }
+                }
+            }
         }
 
         Class<?> superClass = clazz.getSuperclass();
         if (superClass != null && superClass != Activity.class) bindField(superClass);
-    }
-
-    private void bindValue(Field field) {
-        Annotation[] annotations = field.getAnnotations();
-
-        if (annotations != null)
-            for (Annotation annotation : annotations)
-                binder(obj, field, annotation);
     }
 
     private void bindView(Field field) {
@@ -175,59 +170,97 @@ public class Tatami {
             bindFieldReflection(obj, field, view);
     }
 
-    private void binder(Object obj, Field field, Annotation annotation) {
+    private void binder(Object obj, Field field, int type) {
         List<BindValueType> typeList = BindValueType.list();
 
         Object value = null;
-        if (annotation instanceof BindAnim) {
-            int id = BindUtils.getIdentifier(context, field.getName(), "anim", context.getPackageName());
-            value = context.getResources().getAnimation(id);
-        } else if (annotation instanceof BindBool) {
-            int id = BindUtils.getIdentifier(context, field.getName(), "bool", context.getPackageName());
-            value = context.getResources().getBoolean(id);
-        } else if (annotation instanceof BindColor) {
-            int id = BindUtils.getIdentifier(context, field.getName(), "color", context.getPackageName());
-            value = ContextCompat.getColor(context, id);
-        } else if (annotation instanceof BindDimen) {
-            int id = BindUtils.getIdentifier(context, field.getName(), "dimen", context.getPackageName());
-            value = context.getResources().getDimensionPixelSize(id);
-        } else if (annotation instanceof BindDrawable) {
-            int id = BindUtils.getIdentifier(context, field.getName(), "drawable", context.getPackageName());
-            value = ContextCompat.getDrawable(context, id);
-        } else if (annotation instanceof BindInteger) {
-            int id = BindUtils.getIdentifier(context, field.getName(), "integer", context.getPackageName());
-            value = context.getResources().getInteger(id);
-        } else if (annotation instanceof BindString) {
-            int id = BindUtils.getIdentifier(context, field.getName(), "string", context.getPackageName());
-            value = context.getString(id);
-        } else if (annotation instanceof ExtraSerializable) {
-            if (obj instanceof Activity)
-                value = ((Activity) obj).getIntent().getSerializableExtra(field.getName());
-            else if (obj instanceof Fragment)
-                value = ((Fragment) obj).getArguments().getSerializable(field.getName());
-        } else if (annotation instanceof ExtraParcelable) {
-            if (obj instanceof Activity)
-                value = ((Activity) obj).getIntent().getParcelableExtra(field.getName());
-            else if (obj instanceof Fragment)
-                value = ((Fragment) obj).getArguments().getParcelable(field.getName());
-        } else if (annotation instanceof ExtraInt) {
-            if (obj instanceof Activity)
-                value = ((Activity) obj).getIntent().getIntExtra(field.getName(), -1);
-            else if (obj instanceof Fragment)
-                value = ((Fragment) obj).getArguments().getInt(field.getName());
-        } else if (annotation instanceof ExtraString) {
-            if (obj instanceof Activity)
-                value = ((Activity) obj).getIntent().getStringExtra(field.getName());
-            else if (obj instanceof Fragment)
-                value = ((Fragment) obj).getArguments().getString(field.getName());
-        } else if (annotation instanceof ExtraLong) {
-            if (obj instanceof Activity)
-                value = ((Activity) obj).getIntent().getLongExtra(field.getName(), -1);
-            else if (obj instanceof Fragment)
-                value = ((Fragment) obj).getArguments().getLong(field.getName());
+        switch(type) {
+            case TatamiType.BIND_ANIM:{
+                int id = BindUtils.getIdentifier(context, field.getName(), "anim", context.getPackageName());
+                value = context.getResources().getAnimation(id);
+
+                break;
+            }
+            case TatamiType.BIND_BOOL:{
+                int id = BindUtils.getIdentifier(context, field.getName(), "bool", context.getPackageName());
+                value = context.getResources().getBoolean(id);
+
+                break;
+            }
+            case TatamiType.BIND_COLOR:{
+                int id = BindUtils.getIdentifier(context, field.getName(), "color", context.getPackageName());
+                value = ContextCompat.getColor(context, id);
+
+                break;
+            }
+            case TatamiType.BIND_DIMEN:{
+                int id = BindUtils.getIdentifier(context, field.getName(), "dimen", context.getPackageName());
+                value = context.getResources().getDimensionPixelSize(id);
+
+                break;
+            }
+            case TatamiType.BIND_DRAWABLE:{
+                int id = BindUtils.getIdentifier(context, field.getName(), "drawable", context.getPackageName());
+                value = ContextCompat.getDrawable(context, id);
+
+                break;
+            }
+            case TatamiType.BIND_INTEGER:{
+                int id = BindUtils.getIdentifier(context, field.getName(), "integer", context.getPackageName());
+                value = context.getResources().getInteger(id);
+
+                break;
+            }
+            case TatamiType.BIND_STRING:{
+                int id = BindUtils.getIdentifier(context, field.getName(), "string", context.getPackageName());
+                value = context.getString(id);
+
+                break;
+            }
+            case TatamiType.EXTRA_INT:{
+                if (obj instanceof Activity)
+                    value = ((Activity) obj).getIntent().getIntExtra(field.getName(), -1);
+                else if (obj instanceof Fragment)
+                    value = ((Fragment) obj).getArguments().getInt(field.getName());
+
+                break;
+            }
+            case TatamiType.EXTRA_LONG:{
+                if (obj instanceof Activity)
+                    value = ((Activity) obj).getIntent().getLongExtra(field.getName(), -1);
+                else if (obj instanceof Fragment)
+                    value = ((Fragment) obj).getArguments().getLong(field.getName());
+
+                break;
+            }
+            case TatamiType.EXTRA_PARCELABLE:{
+                if (obj instanceof Activity)
+                    value = ((Activity) obj).getIntent().getParcelableExtra(field.getName());
+                else if (obj instanceof Fragment)
+                    value = ((Fragment) obj).getArguments().getParcelable(field.getName());
+
+                break;
+            }
+            case TatamiType.EXTRA_SERIALIZABLE:{
+                if (obj instanceof Activity)
+                    value = ((Activity) obj).getIntent().getSerializableExtra(field.getName());
+                else if (obj instanceof Fragment)
+                    value = ((Fragment) obj).getArguments().getSerializable(field.getName());
+
+                break;
+            }
+            case TatamiType.EXTRA_STRING:{
+                if (obj instanceof Activity)
+                    value = ((Activity) obj).getIntent().getStringExtra(field.getName());
+                else if (obj instanceof Fragment)
+                    value = ((Fragment) obj).getArguments().getString(field.getName());
+
+                break;
+            }
+
         }
 
-        if(value != null)
+        if (value != null)
             bindFieldReflection(obj, field, value);
     }
 

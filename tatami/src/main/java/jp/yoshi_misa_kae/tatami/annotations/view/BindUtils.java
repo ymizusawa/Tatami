@@ -4,7 +4,7 @@ import android.content.Context;
 import android.support.v4.content.ContextCompat;
 
 /**
- * Created by ymizusawa on 2015/12/16.
+ * Created by Yoshitaka Mizusawa on 2015/12/16.
  */
 public class BindUtils {
 

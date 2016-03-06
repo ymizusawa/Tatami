@@ -6,8 +6,10 @@ import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
 
+import jp.yoshi_misa_kae.tatami.TatamiType;
+
 /**
- * Created by ymizusawa on 2015/12/15.
+ * Created by Yoshitaka Mizusawa on 2015/12/15.
  */
 @Retention(RetentionPolicy.RUNTIME)
 @Target(ElementType.METHOD)

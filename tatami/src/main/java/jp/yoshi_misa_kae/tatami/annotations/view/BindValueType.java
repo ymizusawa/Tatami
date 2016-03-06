@@ -4,7 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- * Created by ymizusawa on 2015/12/16.
+ * Created by Yoshitaka Mizusawa on 2015/12/16.
  */
 public enum BindValueType {
 
