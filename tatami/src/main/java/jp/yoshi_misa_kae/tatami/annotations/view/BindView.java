@@ -12,6 +12,5 @@ import jp.yoshi_misa_kae.tatami.TatamiType;
  */
 @Retention(RetentionPolicy.RUNTIME)
 @Target(ElementType.FIELD)
-public @interface View {
-    int TYPE = TatamiType.VIEW;
+public @interface BindView {
 }

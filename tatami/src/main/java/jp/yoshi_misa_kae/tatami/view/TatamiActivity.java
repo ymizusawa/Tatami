@@ -17,12 +17,15 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
+
 import jp.yoshi_misa_kae.tatami.R;
+import jp.yoshi_misa_kae.tatami.annotations.view.BindView;
 import jp.yoshi_misa_kae.tatami.presenter.TatamiActivityPresenter;
 import jp.yoshi_misa_kae.tatami.view.mvp.TatamiActivityMvpView;
 
 public class TatamiActivity extends AppCompatActivity implements TatamiActivityMvpView {
 
+    @BindView
     protected Toolbar toolbar;
 
     private TatamiActivityPresenter presenter;

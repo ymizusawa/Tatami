@@ -14,9 +14,9 @@ import jp.yoshi_misa_kae.tatami.annotations.res.BindDimen;
 import jp.yoshi_misa_kae.tatami.annotations.res.BindDrawable;
 import jp.yoshi_misa_kae.tatami.annotations.res.BindInteger;
 import jp.yoshi_misa_kae.tatami.annotations.res.BindString;
+import jp.yoshi_misa_kae.tatami.annotations.view.BindView;
 import jp.yoshi_misa_kae.tatami.annotations.view.Click;
 import jp.yoshi_misa_kae.tatami.annotations.view.LongClick;
-import jp.yoshi_misa_kae.tatami.annotations.view.View;
 
 /**
  * Created by Yoshitaka Mizusawa on 2016/03/06.
@@ -43,7 +43,7 @@ public class TatamiType {
     public static final int LONG_CLICK = 12;
 
     public static int getAnnotation(Annotation a) {
-        if(a instanceof View) {
+        if(a instanceof BindView) {
             return VIEW;
         } else if(a instanceof Click) {
             return CLICK;
