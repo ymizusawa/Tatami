@@ -44,7 +44,7 @@ public class TatamiActivityPresenter implements Presenter<TatamiActivityMvpView>
 
         tatami = new Tatami(activity);
         if (subscription != null && !subscription.isUnsubscribed()) subscription.unsubscribe();
-        subscription = TatamiSubscribe.onCreateEvent(tatami)
+        subscription = TatamiSubscribe.bindField(tatami)
                 .subscribeOn(Schedulers.newThread())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(new Observer<Void>() {
@@ -64,6 +64,22 @@ public class TatamiActivityPresenter implements Presenter<TatamiActivityMvpView>
                         isCreate = true;
                     }
                 });
+        TatamiSubscribe.onBindEvent(tatami)
+            .subscribeOn(Schedulers.newThread())
+            .observeOn(AndroidSchedulers.mainThread())
+            .subscribe(new Observer<Void>() {
+                @Override
+                public void onCompleted() {
+                }
+
+                @Override
+                public void onError(Throwable e) {
+                }
+
+                @Override
+                public void onNext(Void t) {
+                }
+            });
     }
 
     public void onResume() {

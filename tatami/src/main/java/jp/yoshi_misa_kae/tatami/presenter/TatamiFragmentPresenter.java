@@ -44,7 +44,7 @@ public class TatamiFragmentPresenter implements Presenter<TatamiFragmentMvpView>
     }
 
     public void onActivityCreated(final Bundle savedInstanceState) {
-        subscription1 = TatamiSubscribe.onCreateEvent(tatami)
+        subscription1 = TatamiSubscribe.bindField(tatami)
                 .subscribeOn(Schedulers.newThread())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(new Observer<Void>() {
@@ -65,23 +65,23 @@ public class TatamiFragmentPresenter implements Presenter<TatamiFragmentMvpView>
                         isCreate = true;
                     }
                 });
-//        subscription2 = TatamiSubscribe.onCreateEvent(tatami)
-//            .subscribeOn(Schedulers.newThread())
-//            .observeOn(AndroidSchedulers.mainThread())
-//            .subscribe(new Observer<Void>() {
-//
-//                @Override
-//                public void onCompleted() {
-//                }
-//
-//                @Override
-//                public void onError(Throwable e) {
-//                }
-//
-//                @Override
-//                public void onNext(Void t) {
-//                }
-//            });
+        TatamiSubscribe.onCreateEvent(tatami)
+            .subscribeOn(Schedulers.newThread())
+            .observeOn(AndroidSchedulers.mainThread())
+            .subscribe(new Observer<Void>() {
+
+                @Override
+                public void onCompleted() {
+                }
+
+                @Override
+                public void onError(Throwable e) {
+                }
+
+                @Override
+                public void onNext(Void t) {
+                }
+            });
     }
 
     public void onResume() {

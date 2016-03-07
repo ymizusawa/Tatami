@@ -19,13 +19,13 @@ public class TatamiSubscribe {
 //        });
     }
 
-    private static Observable<Void> bindField(final Tatami tatami) {
+    public static Observable<Void> bindField(final Tatami tatami) {
         return
                 Observable.create(
                         new Observable.OnSubscribe<Void>() {
                             @Override
                             public void call(Subscriber<? super Void> subscriber) {
-                                tatami.bind();
+                                tatami.bindField();
 
                                 subscriber.onNext(null);
                                 subscriber.onCompleted();
@@ -34,19 +34,19 @@ public class TatamiSubscribe {
 
     }
 
-//    public static Observable<Void> onBindEvent(final Tatami tatami) {
-//        return
-//                Observable.create(
-//                        new Observable.OnSubscribe<Void>() {
-//                            @Override
-//                            public void call(Subscriber<? super Void> subscriber) {
-//                                tatami.bindEvent();
-//
-//                                subscriber.onNext(null);
-//                                subscriber.onCompleted();
-//                            }
-//                        });
-//    }
+    public static Observable<Void> onBindEvent(final Tatami tatami) {
+        return
+                Observable.create(
+                        new Observable.OnSubscribe<Void>() {
+                            @Override
+                            public void call(Subscriber<? super Void> subscriber) {
+                                tatami.bindEvent();
+
+                                subscriber.onNext(null);
+                                subscriber.onCompleted();
+                            }
+                        });
+    }
 
     public static Observable<Void> onDestroy(final Tatami tatami) {
         return Observable.create(
