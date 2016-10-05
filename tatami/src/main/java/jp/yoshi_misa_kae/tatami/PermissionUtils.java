@@ -8,8 +8,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- * アプリで使用するパーミッションを管理する
- * <p/>
  * Created by Yoshitaka Mizusawa on 2016/03/09.
  */
 public class PermissionUtils {

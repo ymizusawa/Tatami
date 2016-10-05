@@ -6,12 +6,6 @@ import android.content.pm.PackageManager;
 
 public class AppUtils {
 
-    /**
-     * バージョンコードを取得する
-     *
-     * @param context
-     * @return
-     */
     public static int getVersionCode(Context context) {
         PackageManager pm = context.getPackageManager();
         int versionCode = 0;
@@ -24,12 +18,6 @@ public class AppUtils {
         return versionCode;
     }
 
-    /**
-     * バージョン名を取得する
-     *
-     * @param context
-     * @return
-     */
     public static String getVersionName(Context context) {
         PackageManager pm = context.getPackageManager();
         String versionName = "";

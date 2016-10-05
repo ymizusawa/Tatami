@@ -31,7 +31,6 @@ public class TatamiPermission {
                     if (PermissionUtils.hasPermission(context, permissions)) {
                         activity.allPermissionSettings();
                     } else {
-                        // 権限がない場合はリクエスト
                         requestPermission();
                     }
             }
@@ -63,7 +62,6 @@ public class TatamiPermission {
     }
 
     public void requestPermissions() {
-        // 権限を取得する
         ActivityCompat.requestPermissions(activity, permissions, TatamiActivity.REQUEST_CODE_PERMISSION);
     }
 

@@ -117,13 +117,6 @@ public class TatamiMapView extends MapView implements OnMapReadyCallback {
         }
     }
 
-    /**
-     * カメラを作成する
-     *
-     * @param latLng
-     * @param zoomLevel
-     * @return
-     */
     protected CameraUpdate createCamera(LatLng latLng, float zoomLevel) {
         return CameraUpdateFactory
                 .newCameraPosition(new CameraPosition.Builder()
