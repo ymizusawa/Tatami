@@ -3,4 +3,9 @@
 
     <dimen name="contentsMargin">16dp</dimen>
 
+    <dimen name="font_verysmall">8sp</dimen>
+    <dimen name="font_small">12sp</dimen>
+    <dimen name="font_normal">16sp</dimen>
+    <dimen name="font_large">20sp</dimen>
+
 </resources>

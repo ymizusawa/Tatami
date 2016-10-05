@@ -2,6 +2,8 @@ package jp.yoshi_misa_kae.tatami;
 
 import java.lang.annotation.Annotation;
 
+import jp.yoshi_misa_kae.tatami.annotations.event.Click;
+import jp.yoshi_misa_kae.tatami.annotations.event.LongClick;
 import jp.yoshi_misa_kae.tatami.annotations.extra.ExtraInt;
 import jp.yoshi_misa_kae.tatami.annotations.extra.ExtraLong;
 import jp.yoshi_misa_kae.tatami.annotations.extra.ExtraParcelable;
@@ -15,8 +17,6 @@ import jp.yoshi_misa_kae.tatami.annotations.res.BindDrawable;
 import jp.yoshi_misa_kae.tatami.annotations.res.BindInteger;
 import jp.yoshi_misa_kae.tatami.annotations.res.BindString;
 import jp.yoshi_misa_kae.tatami.annotations.view.BindView;
-import jp.yoshi_misa_kae.tatami.annotations.view.Click;
-import jp.yoshi_misa_kae.tatami.annotations.view.LongClick;
 
 /**
  * Created by Yoshitaka Mizusawa on 2016/03/06.
@@ -41,6 +41,12 @@ public class TatamiType {
 
     public static final int CLICK = 11;
     public static final int LONG_CLICK = 12;
+    public static final int MENU_CLICK = 21;
+
+    public static final int TYPE_VIEW = 10001;
+    public static final int TYPE_EXTRA = 10002;
+    public static final int TYPE_RES = 10003;
+    public static final int TYPE_EVENT = 10004;
 
     public static int getAnnotation(Annotation a) {
         if(a instanceof BindView) {
